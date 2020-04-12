@@ -11,7 +11,10 @@
       <Filter>Source Files\matlab</Filter>
     </ClCompile>
     <ClCompile Include="MainWidget.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceHelper.cpp">
+      <Filter>Source Files\util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -41,12 +44,18 @@
     <Filter Include="Source Files\matlab">
       <UniqueIdentifier>{c096f86c-da71-4e0c-b735-2f91c32e77e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ui">
+      <UniqueIdentifier>{ee42fa54-cc05-421b-99f5-1e109e247d6e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MatlabManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -12,8 +12,8 @@ public:
 	~MainWidget();
 	void startSimulation();
 private:
-	QImage* circuitImage;
-	QImage* simulationImage;
+	QImage circuitImage;
+	QImage simulationImage;
 	QFuture<void>* future;
 	QFutureWatcher<void>* watcher;
 	Ui::MainWidgetClass ui;

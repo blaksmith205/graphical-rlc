@@ -3,6 +3,7 @@
 #include "mainwidget.h"
 #include "MatlabEngine.hpp"
 #include "MatlabDataArray.hpp"
+#include "ResourceHelper.h"
 
 MainWidget::MainWidget(QWidget *parent)
 	: QWidget(parent)
@@ -11,16 +12,12 @@ MainWidget::MainWidget(QWidget *parent)
 	ui.progressBar->setVisible(false);
 	future = new QFuture<void>();
 	watcher = new QFutureWatcher<void>();
-	circuitImage = new QImage();
-	simulationImage = new QImage();
 	connect(ui.simulateButton, SIGNAL(clicked()), this, SLOT(startSimulationAsync()));
 	connect(watcher, SIGNAL(finished()), this, SLOT(showImage()));
 }
 
 MainWidget::~MainWidget()
 {
-	delete circuitImage;
-	delete simulationImage;
 	delete future;
 	delete watcher;
 }
@@ -83,8 +80,8 @@ void MainWidget::startSimulation()
 
 void MainWidget::showImage()
 {
-	simulationImage->load("F:/blaks/Documents/Coding/C++/graphical-rlc/graphical-rlc/SimulationOutput/vdpSimulation.png");
-	*simulationImage = simulationImage->scaled(ui.simulationOutput->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+	simulationImage = ResourceHelper::loadImage(this, "F:/blaks/Documents/Coding/C++/graphical-rlc/graphical-rlc/SimulationOutput/vdpSimulation.png");
+	simulationImage = simulationImage.scaled(ui.simulationOutput->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 	ui.progressBar->setVisible(false);
-	ui.simulationOutput->setPixmap(QPixmap::fromImage(*simulationImage));
+	ui.simulationOutput->setPixmap(QPixmap::fromImage(simulationImage));
 }
