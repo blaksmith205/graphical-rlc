@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include <QtConcurrent>
 #include "mainwidget.h"
-#include "MatlabSimulator.h"
+#include "MatlabEngine.hpp"
+#include "MatlabDataArray.hpp"
 #include "ResourceHelper.h"
 
 MainWidget::MainWidget(QWidget *parent)
@@ -30,10 +31,51 @@ void MainWidget::startSimulationAsync()
 
 void MainWidget::startSimulation()
 {
-	MatlabSimulator simulator(u"vdp");
-	simulator.loadModel();
-	simulator.runSimulation();
-	simulator.saveResult();
+	using namespace matlab::engine;
+
+	// Connect to the MATLAB engine
+	std::unique_ptr<MATLABEngine> matlabPtr = startMATLAB();
+
+	// Create MATLAB data array factory
+	matlab::data::ArrayFactory factory;
+
+	// Create struct for simulation parameters
+	auto parameterStruct = factory.createStructArray({ 1,4 }, {
+		"SaveOutput",
+		"OutputSaveName",
+		"SaveTime",
+		"TimeSaveName" });
+	parameterStruct[0]["SaveOutput"] = factory.createCharArray("on");
+	parameterStruct[0]["OutputSaveName"] = factory.createCharArray("yOut");
+	parameterStruct[0]["SaveTime"] = factory.createCharArray("on");
+	parameterStruct[0]["TimeSaveName"] = factory.createCharArray("tOut");
+
+	// Put simulation parameter struct in MATLAB
+	matlabPtr->setVariable(u"parameterStruct", parameterStruct);
+
+	// Load vdp Simulink model
+	FutureResult<void> loadFuture = matlabPtr->evalAsync(u"load_system('vdp')");
+	//std::cout << "Loading Simulink model... " << std::endl;
+	std::future_status loadStatus;
+	do {
+		loadStatus = loadFuture.wait_for(std::chrono::seconds(1));
+	} while (loadStatus != std::future_status::ready);
+	//std::cout << "vdp model loaded\n";
+
+	// Run simulation
+	FutureResult<void> simFuture = matlabPtr->evalAsync(u"simOut = sim('vdp',parameterStruct);");
+	//std::cout << "Running simulation... " << std::endl;
+	std::future_status simStatus;
+	do {
+		simStatus = loadFuture.wait_for(std::chrono::seconds(1));
+	} while (simStatus != std::future_status::ready);
+	//std::cout << "vdp simulation complete\n";
+
+	// Get simulation data and create a graph
+	matlabPtr->eval(u"y = simOut.get('yOut');");
+	matlabPtr->eval(u"t = simOut.get('tOut');");
+	matlabPtr->eval(u"f = figure('visible','off'); plot(t,y);"); // Polt without showing the image
+	matlabPtr->eval(u"print('SimulationOutput/vdpSimulation','-dpng')");
 }
 
 void MainWidget::showImage()
