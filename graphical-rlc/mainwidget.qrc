@@ -1,4 +1,5 @@
 <RCC>
-    <qresource prefix="MainWidget">
+    <qresource prefix="/MainWidget">
+        <file>Resources/AC_R_circuit.png</file>
     </qresource>
 </RCC>

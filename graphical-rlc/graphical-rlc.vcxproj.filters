@@ -4,10 +4,13 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mainwidget.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="MatlabManager.cpp">
+      <Filter>Source Files\matlab</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,16 +35,20 @@
       <Extensions>ui</Extensions>
       <ParseFiles>true</ParseFiles>
     </Filter>
+    <Filter Include="Source Files\util">
+      <UniqueIdentifier>{c54a54d6-09a7-4bf2-b8d9-4cb9cc1a6663}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\matlab">
+      <UniqueIdentifier>{c096f86c-da71-4e0c-b735-2f91c32e77e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="mainwidget.h">
+    <ClInclude Include="MatlabManager.h">
       <Filter>Header Files</Filter>
-    </QtMoc>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="mainwidget.ui">
@@ -55,5 +62,10 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="graphical-rlc.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="MainWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
 </Project>
