@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include "ResourceHelper.h"
+#include "ResourceManager.h"
 
-QImage ResourceHelper::loadImage(QWidget *parent, const QString& filename)
+QImage ResourceManager::loadImage(QWidget *parent, const QString& filename)
 {
     QImageReader reader(filename);
     reader.setAutoTransform(true);

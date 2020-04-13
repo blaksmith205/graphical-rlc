@@ -2,6 +2,7 @@
 
 #include <QtWidgets/QWidget>
 #include "ui_mainwidget.h"
+#include "MatlabManager.h"
 
 class MainWidget : public QWidget
 {

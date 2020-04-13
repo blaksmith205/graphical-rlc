@@ -3,7 +3,7 @@
 #include "mainwidget.h"
 #include "MatlabEngine.hpp"
 #include "MatlabDataArray.hpp"
-#include "ResourceHelper.h"
+#include "ResourceManager.h"
 
 MainWidget::MainWidget(QWidget *parent)
 	: QWidget(parent)
@@ -80,7 +80,7 @@ void MainWidget::startSimulation()
 
 void MainWidget::showImage()
 {
-	simulationImage = ResourceHelper::loadImage(this, "F:/blaks/Documents/Coding/C++/graphical-rlc/graphical-rlc/SimulationOutput/vdpSimulation.png");
+	simulationImage = ResourceManager::loadImage(this, "SimulationOutput/vdpSimulation.png");
 	simulationImage = simulationImage.scaled(ui.simulationOutput->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 	ui.progressBar->setVisible(false);
 	ui.simulationOutput->setPixmap(QPixmap::fromImage(simulationImage));

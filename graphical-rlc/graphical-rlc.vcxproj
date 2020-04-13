@@ -96,7 +96,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ResourceHelper.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWidget.cpp" />
     <ClCompile Include="MatlabManager.cpp" />
@@ -107,7 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MainWidget.h" />
-    <ClInclude Include="ResourceHelper.h" />
+    <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="MatlabManager.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>

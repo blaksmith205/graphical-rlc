@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-class ResourceHelper {
+class ResourceManager {
 public:
 	static QImage loadImage(QWidget* parent, const QString& filename);
 };

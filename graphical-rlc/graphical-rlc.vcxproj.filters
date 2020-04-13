@@ -13,7 +13,7 @@
     <ClCompile Include="MainWidget.cpp">
       <Filter>Source Files\ui</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceHelper.cpp">
+    <ClCompile Include="ResourceManager.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
   </ItemGroup>
@@ -55,7 +55,7 @@
     <ClInclude Include="MatlabManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceHelper.h">
+    <ClInclude Include="ResourceManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
