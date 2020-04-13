@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "ImageDisplay.h"
 
-ImageDisplay::ImageDisplay(QWidget *parent)
-	: QWidget(parent)
+ImageDisplay::ImageDisplay(std::shared_ptr<CircuitData> data, QWidget *parent)
+	: QWidget(parent), circuitData(data)
 {
 	ui.setupUi(this);
 }

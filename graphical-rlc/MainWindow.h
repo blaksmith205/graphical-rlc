@@ -2,7 +2,7 @@
 
 #include <QtWidgets/QWidget>
 #include "ui_MainWindow.h"
-#include "CircuitInfo.h"
+#include "CircuitData.h"
 #include "CircuitOptions.h"
 #include "ImageDisplay.h"
 
@@ -11,13 +11,14 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	MainWindow(QWidget *parent = Q_NULLPTR);
+	MainWindow(std::shared_ptr<CircuitData> data, QWidget *parent = Q_NULLPTR);
 	~MainWindow();
 	void startSimulation();
 private:
 	void buildComponentMap();
 	void showCircuit(const QString& resource);
 private:
+	std::shared_ptr<CircuitData> circuitData;
 	CircuitComponent selectedComponents;
 	// Custom left and right widgets
 	CircuitOptions* circuitsOptions;

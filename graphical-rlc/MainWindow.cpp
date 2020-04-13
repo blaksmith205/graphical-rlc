@@ -5,8 +5,8 @@
 #include "MatlabDataArray.hpp"
 #include "ResourceManager.h"
 
-MainWindow::MainWindow(QWidget* parent)
-	: QMainWindow(parent), circuitsOptions(new CircuitOptions(ui.mainLeft)), outputImages(new ImageDisplay(ui.mainRight))
+MainWindow::MainWindow(std::shared_ptr<CircuitData> data, QWidget* parent)
+	: QMainWindow(parent), circuitsOptions(new CircuitOptions(data, ui.mainLeft)), outputImages(new ImageDisplay(data, ui.mainRight)), circuitData(data)
 {
 	ui.setupUi(this);
 	ui.progressBar->setVisible(false);
@@ -118,21 +118,21 @@ void MainWindow::selectedComponets(const QString &text)
 	//	resource.append("AC_R_circuit.png");
 	//	break;
 	//case CircuitComponent::RL:
-	//	if (data->getConfig() == CircuitConfiguration::SERIES)
+	//	if (circuitData->getConfig() == CircuitConfiguration::SERIES)
 	//		resource.append("AC_RL_series_circuit.png");
-	//	else if (data->getConfig() == CircuitConfiguration::PARALLEL)
+	//	else if (circuitData->getConfig() == CircuitConfiguration::PARALLEL)
 	//		resource.append("AC_RL_parallel_circuit.png");
 	//	break;
 	//case CircuitComponent::RC:
-	//	if (data->getConfig() == CircuitConfiguration::SERIES)
+	//	if (circuitData->getConfig() == CircuitConfiguration::SERIES)
 	//		resource.append("AC_RC_series_circuit.png");
-	//	else if (data->getConfig() == CircuitConfiguration::PARALLEL)
+	//	else if (circuitData->getConfig() == CircuitConfiguration::PARALLEL)
 	//		resource.append("AC_RC_parallel_circuit.png");
 	//	break;
 	//case CircuitComponent::RLC:
-	//	if (data->getConfig() == CircuitConfiguration::SERIES)
+	//	if (circuitData->getConfig() == CircuitConfiguration::SERIES)
 	//		resource.append("AC_RLC_series_circuit.png");
-	//	else if (data->getConfig() == CircuitConfiguration::PARALLEL)
+	//	else if (circuitData->getConfig() == CircuitConfiguration::PARALLEL)
 	//		resource.append("AC_RLC_parallel_circuit.png");
 	//	break;
 	//}

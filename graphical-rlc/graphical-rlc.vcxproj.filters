@@ -25,6 +25,7 @@
     <ClCompile Include="CircuitData.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
+    <ClCompile Include="UnitConverter.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
   </ItemGroup>
@@ -72,6 +73,9 @@
     <ClInclude Include="CircuitInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UnitConverter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="mainwidget.qrc">
@@ -100,6 +104,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="ImageDisplay.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="CircuitData.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
