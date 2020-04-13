@@ -319,7 +319,7 @@
          <item>
           <layout class="QFormLayout" name="formLayout">
            <item row="0" column="0">
-            <widget class="QLabel" name="circuitTypeLabel">
+            <widget class="QLabel" name="circuitConfigLabel">
              <property name="minimumSize">
               <size>
                <width>67</width>
@@ -327,7 +327,7 @@
               </size>
              </property>
              <property name="text">
-              <string>Circuit Type</string>
+              <string>Circuit Configuration</string>
              </property>
              <property name="margin">
               <number>5</number>
@@ -335,7 +335,7 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="circuitTypeComboBox">
+            <widget class="QComboBox" name="circuitConfigSelection">
              <property name="minimumSize">
               <size>
                <width>0</width>
