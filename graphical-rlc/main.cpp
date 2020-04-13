@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "mainwidget.h"
+#include "MainWindow.h"
 #include <QtWidgets/QApplication>
 
 // TODO: Check to make sure the user has matlab installed
@@ -7,7 +7,7 @@
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	MainWidget w;
+	MainWindow w;
 	w.show();
 	return a.exec();
 }

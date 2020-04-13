@@ -10,10 +10,21 @@
     <ClCompile Include="MatlabManager.cpp">
       <Filter>Source Files\matlab</Filter>
     </ClCompile>
-    <ClCompile Include="MainWidget.cpp">
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow.cpp">
       <Filter>Source Files\ui</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
+    <ClCompile Include="CircuitOptions.cpp">
+      <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageDisplay.cpp">
+      <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="CircuitData.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
       <Filter>Source Files\util</Filter>
     </ClCompile>
   </ItemGroup>
@@ -58,14 +69,9 @@
     <ClInclude Include="ResourceManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CircuitProperties.h">
+    <ClInclude Include="CircuitInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <QtUic Include="mainwidget.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="mainwidget.qrc">
@@ -76,7 +82,24 @@
     <ResourceCompile Include="graphical-rlc.rc" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="MainWidget.h">
+    <QtUic Include="MainWindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="CircuitOptions.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="ImageDisplay.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="MainWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="CircuitOptions.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ImageDisplay.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

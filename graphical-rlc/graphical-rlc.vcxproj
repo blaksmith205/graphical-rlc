@@ -96,9 +96,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CircuitOptions.cpp" />
+    <ClCompile Include="ImageDisplay.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MainWidget.cpp" />
+    <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="MatlabManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -106,14 +108,18 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="MainWidget.h" />
-    <ClInclude Include="CircuitProperties.h" />
+    <QtMoc Include="MainWindow.h" />
+    <QtMoc Include="CircuitOptions.h" />
+    <ClInclude Include="CircuitInfo.h" />
+    <QtMoc Include="ImageDisplay.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="MatlabManager.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="mainwidget.ui" />
+    <QtUic Include="CircuitOptions.ui" />
+    <QtUic Include="ImageDisplay.ui" />
+    <QtUic Include="MainWindow.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="mainwidget.qrc" />

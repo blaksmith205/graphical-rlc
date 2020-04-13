@@ -1,40 +1,42 @@
 #include "stdafx.h"
 #include <QtConcurrent>
-#include "mainwidget.h"
+#include "MainWindow.h"
 #include "MatlabEngine.hpp"
 #include "MatlabDataArray.hpp"
 #include "ResourceManager.h"
 
-MainWidget::MainWidget(QWidget *parent)
-	: QWidget(parent)
+MainWindow::MainWindow(QWidget* parent)
+	: QMainWindow(parent), circuitsOptions(new CircuitOptions(ui.mainLeft)), outputImages(new ImageDisplay(ui.mainRight))
 {
 	ui.setupUi(this);
 	ui.progressBar->setVisible(false);
 	future = new QFuture<void>();
 	watcher = new QFutureWatcher<void>();
+	ui.mainLeft->setLayout(circuitsOptions->layout());
+	ui.mainRight->setLayout(outputImages->layout());
 	buildComponentMap();
 	// Connect the events to the proper handlers
-	connect(ui.simulateButton, SIGNAL(clicked()), this, SLOT(startSimulationAsync()));
-	connect(watcher, SIGNAL(finished()), this, SLOT(showOutput()));
-	connect(ui.circuitConfigSelection,
-		SIGNAL(currentIndexChanged(int)), this, SLOT(updateConfiguration(int)));
-	connect(ui.circuitToSimulate, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(selectedComponets(const QString&)));
+	//connect(ui.simulateButton, SIGNAL(clicked()), this, SLOT(startSimulationAsync()));
+	//connect(watcher, SIGNAL(finished()), this, SLOT(showOutput()));
+	//connect(ui.circircuitConfigSelection,
+	//	SIGNAL(currentIndexChanged(int)), this, SLOT(updateConfiguration(int)));
+	//connect(ui.circuitToSimulate, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(selectedComponets(const QString&)));
 }
 
-MainWidget::~MainWidget()
+MainWindow::~MainWindow()
 {
 	delete future;
 	delete watcher;
 }
 
-void MainWidget::startSimulationAsync() 
+void MainWindow::startSimulationAsync() 
 {
 	ui.progressBar->setVisible(true);
-	*future = QtConcurrent::run(this, &MainWidget::startSimulation);
+	*future = QtConcurrent::run(this, &MainWindow::startSimulation);
 	watcher->setFuture(*future);
 }
 
-void MainWidget::startSimulation()
+void MainWindow::startSimulation()
 {
 	using namespace matlab::engine;
 
@@ -83,69 +85,56 @@ void MainWidget::startSimulation()
 	matlabPtr->eval(u"print('SimulationOutput/vdpSimulation','-dpng')");
 }
 
-void MainWidget::buildComponentMap()
+void MainWindow::buildComponentMap()
 {
-	componentMap.insert(std::pair<QString,CircuitComponents>("R", CircuitComponents::R));
-	componentMap.insert(std::pair<QString,CircuitComponents>("RL", CircuitComponents::RL));
-	componentMap.insert(std::pair<QString,CircuitComponents>("RC", CircuitComponents::RC));
-	componentMap.insert(std::pair<QString,CircuitComponents>("RLC", CircuitComponents::RLC));
+	componentMap.insert(std::pair<QString,CircuitComponent>("R", CircuitComponent::R));
+	componentMap.insert(std::pair<QString,CircuitComponent>("RL", CircuitComponent::RL));
+	componentMap.insert(std::pair<QString,CircuitComponent>("RC", CircuitComponent::RC));
+	componentMap.insert(std::pair<QString,CircuitComponent>("RLC", CircuitComponent::RLC));
 }
 
 // Todo: Scale Images without the size drift and dynamic sizes
-void MainWidget::showCircuit(const QString &resource)
+void MainWindow::showCircuit(const QString &resource)
 {
 	circuitImage = ResourceManager::loadImage(this, resource);
 	circuitImage = circuitImage.scaled(390,294, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-	ui.circuitsPreview->setPixmap(QPixmap::fromImage(circuitImage));
+	//ui.circuitsPreview->setPixmap(QPixmap::fromImage(circuitImage));
 }
 
-void MainWidget::showOutput()
+void MainWindow::showOutput()
 {
 	simulationImage = ResourceManager::loadImage(this, "SimulationOutput/vdpSimulation.png");
 	simulationImage = simulationImage.scaled(390, 240, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 	ui.progressBar->setVisible(false);
-	ui.simulationOutput->setPixmap(QPixmap::fromImage(simulationImage));
+	//ui.simulationOutput->setPixmap(QPixmap::fromImage(simulationImage));
 }
 
-void MainWidget::selectedComponets(const QString &text)
+void MainWindow::selectedComponets(const QString &text)
 {
-	selectedComponents = componentMap[text];
-	QString resource(":/MainWidget/Resources/");
-	switch (selectedComponents) {
-	case CircuitComponents::R:
-		resource.append("AC_R_circuit.png");
-		break;
-	case CircuitComponents::RL:
-		if (selectedConfiguration == CircuitConfiguration::SERIES)
-			resource.append("AC_RL_series_circuit.png");
-		else if (selectedConfiguration == CircuitConfiguration::PARALLEL)
-			resource.append("AC_RL_parallel_circuit.png");
-		break;
-	case CircuitComponents::RC:
-		if (selectedConfiguration == CircuitConfiguration::SERIES)
-			resource.append("AC_RC_series_circuit.png");
-		else if (selectedConfiguration == CircuitConfiguration::PARALLEL)
-			resource.append("AC_RC_parallel_circuit.png");
-		break;
-	case CircuitComponents::RLC:
-		if (selectedConfiguration == CircuitConfiguration::SERIES)
-			resource.append("AC_RLC_series_circuit.png");
-		else if (selectedConfiguration == CircuitConfiguration::PARALLEL)
-			resource.append("AC_RLC_parallel_circuit.png");
-		break;
-	}
-	showCircuit(resource);
-}
-
-void MainWidget::updateConfiguration(int index)
-{
-	switch (index) {
-	case 0:
-		selectedConfiguration = CircuitConfiguration::SERIES;
-		break;
-	case 1:
-		selectedConfiguration = CircuitConfiguration::PARALLEL;
-	}
-	// Update the circuit preview to match new selection
-	selectedComponets(ui.circuitToSimulate->itemText(ui.circuitToSimulate->currentIndex()));
+	//selectedComponents = componentMap[text];
+	//QString resource(":/MainWidget/Resources/");
+	//switch (selectedComponents) {
+	//case CircuitComponent::R:
+	//	resource.append("AC_R_circuit.png");
+	//	break;
+	//case CircuitComponent::RL:
+	//	if (data->getConfig() == CircuitConfiguration::SERIES)
+	//		resource.append("AC_RL_series_circuit.png");
+	//	else if (data->getConfig() == CircuitConfiguration::PARALLEL)
+	//		resource.append("AC_RL_parallel_circuit.png");
+	//	break;
+	//case CircuitComponent::RC:
+	//	if (data->getConfig() == CircuitConfiguration::SERIES)
+	//		resource.append("AC_RC_series_circuit.png");
+	//	else if (data->getConfig() == CircuitConfiguration::PARALLEL)
+	//		resource.append("AC_RC_parallel_circuit.png");
+	//	break;
+	//case CircuitComponent::RLC:
+	//	if (data->getConfig() == CircuitConfiguration::SERIES)
+	//		resource.append("AC_RLC_series_circuit.png");
+	//	else if (data->getConfig() == CircuitConfiguration::PARALLEL)
+	//		resource.append("AC_RLC_parallel_circuit.png");
+	//	break;
+	//}
+	//showCircuit(resource);
 }
