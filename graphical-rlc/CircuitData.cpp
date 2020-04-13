@@ -53,16 +53,6 @@ void CircuitData::setComponentValue(Keys key, double val, CircuitComponetScale s
 	}
 }
 
-CircuitComponent CircuitData::getComponent(const QString&)
-{
-	return CircuitComponent();
-}
-
-double CircuitData::getComponentValue(const QString&)
-{
-	return 0.0;
-}
-
 void CircuitData::changeVoltage(double val, CircuitComponetScale scale, CircuitUnit unit)
 {
 	bool changed = false;

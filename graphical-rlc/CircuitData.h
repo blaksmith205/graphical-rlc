@@ -36,9 +36,9 @@ public:
 	inline std::vector<double> componentValues() { return { resistor, inductor, capacitor, voltage, frequency, phase, offset }; };
 
 	// Return 1 element at a time using a map
-	CircuitConfiguration getConfig() { return circuitConfig; };
-	CircuitComponent getComponent(const QString&);
-	double getComponentValue(const QString&);
+	inline CircuitConfiguration getConfig() { return circuitConfig; };
+	inline CircuitComponent getComponent(Keys key) { return *(componentMap[key]); };
+	inline double getComponentValue(Keys key) { return *(componentValueMap[key]); };
 private:
 	void changeVoltage(double val, CircuitComponetScale scale, CircuitUnit unit);
 	void changeFrequency(double val, CircuitComponetScale scale, CircuitUnit unit);
@@ -55,9 +55,9 @@ private:
 	double frequency;
 	double phase;
 	double offset;
-	CircuitUnit voltageUnit;
-	CircuitUnit frequencyUnit;
-	CircuitUnit phaseUnit;
+	CircuitUnit voltageUnit = CircuitUnit::VOLTS;
+	CircuitUnit frequencyUnit = CircuitUnit::HERTZ;
+	CircuitUnit phaseUnit = CircuitUnit::DEGREES;
 
 	// Maps for single element retrieval
 	std::map<Keys, CircuitComponent*> componentMap = { {Keys::CIRCUIT_COMPONENTS, &circuitComponents}, {Keys::MEASURE_ACROSS, &measureAcross} };
