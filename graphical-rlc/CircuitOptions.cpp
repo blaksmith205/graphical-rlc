@@ -5,6 +5,7 @@ CircuitOptions::CircuitOptions(std::shared_ptr<CircuitData> data, QWidget *paren
 	: QWidget(parent), circuitData(data)
 {
 	ui.setupUi(this);
+	buildMap();
 	// Limit TextFields to only accept numbers
 	double top = 10000; // Top - 1 is the number of characters limit
 	QList<QLineEdit*> lineEdits = this->findChildren<QLineEdit*>();
@@ -37,6 +38,25 @@ void CircuitOptions::updateCircuitConfig(int index) {
 	case 1:
 		circuitData->setCircuitConfig(CircuitConfiguration::PARALLEL);		
 		break;
+	}
+}
+
+void CircuitOptions::buildMap()
+{
+	fieldToDataMap.insert({ui.resistorText, CircuitData::Keys::RESISTOR});
+	fieldToDataMap.insert({ui.inductorText, CircuitData::Keys::INDUCTOR});
+	fieldToDataMap.insert({ui.capacitorText, CircuitData::Keys::CAPACITOR});
+	fieldToDataMap.insert({ui.voltageText, CircuitData::Keys::VOLTAGE});
+	fieldToDataMap.insert({ui.frequencyText, CircuitData::Keys::FREQUENCY});
+	fieldToDataMap.insert({ui.phaseText, CircuitData::Keys::PHASE});
+	fieldToDataMap.insert({ui.offsetText, CircuitData::Keys::OFFSET});
+}
+
+void CircuitOptions::saveData()
+{
+	QList<QLineEdit*> lineEdits = this->findChildren<QLineEdit*>();
+	for (const auto linedit : lineEdits) {
+		//circuitData->setComponentValue()
 	}
 }
 
