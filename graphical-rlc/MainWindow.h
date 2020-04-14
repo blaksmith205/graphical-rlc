@@ -24,7 +24,7 @@ private:
 	Ui::MainWindowClass ui;
 
 	// Can't remove this because app displaying breaks
-	std::map<QString, CircuitComponent> componentMap;
+	std::map<QString, Circuit::Components> componentMap;
 private slots:
 	void startSimulationAsync();
 	void changeProgressBar(int visible);

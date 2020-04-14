@@ -33,10 +33,10 @@ CircuitOptions::CircuitOptions(std::shared_ptr<CircuitData> data, QWidget *paren
 void CircuitOptions::updateCircuitConfig(int index) {
 	switch (index) {
 	case 0:
-		circuitData->setCircuitConfig(CircuitConfiguration::SERIES);
+		circuitData->setCircuitConfig(Circuit::Configuration::SERIES);
 		break;
 	case 1:
-		circuitData->setCircuitConfig(CircuitConfiguration::PARALLEL);		
+		circuitData->setCircuitConfig(Circuit::Configuration::PARALLEL);		
 		break;
 	}
 }

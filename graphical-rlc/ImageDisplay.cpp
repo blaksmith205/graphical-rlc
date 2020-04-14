@@ -13,10 +13,10 @@ ImageDisplay::ImageDisplay(std::shared_ptr<CircuitData> data, QWidget* parent)
 
 void ImageDisplay::buildMap()
 {
-	stringToComponentMap.insert({ "R", CircuitComponent::R });
-	stringToComponentMap.insert({ "RL", CircuitComponent::RL });
-	stringToComponentMap.insert({ "RC", CircuitComponent::RC });
-	stringToComponentMap.insert({ "RLC", CircuitComponent::RLC });
+	stringToComponentMap.insert({ "R", Circuit::Components::R });
+	stringToComponentMap.insert({ "RL", Circuit::Components::RL });
+	stringToComponentMap.insert({ "RC", Circuit::Components::RC });
+	stringToComponentMap.insert({ "RLC", Circuit::Components::RLC });
 }
 
 void ImageDisplay::showOutput(const QString& simulationOutput) {
@@ -33,29 +33,29 @@ void ImageDisplay::showPreview(const QString& resource) {
 }
 
 void ImageDisplay::updateComponents(const QString& text) {
-	CircuitComponent selectedComponents = stringToComponentMap[text];
+	Circuit::Components selectedComponents = stringToComponentMap[text];
 	circuitData->setComponent(CircuitData::Keys::CIRCUIT_COMPONENTS, selectedComponents);
 	QString resource(":/Previews/Resources/");
 	switch (selectedComponents) {
-	case CircuitComponent::R:
+	case Circuit::Components::R:
 		resource.append("AC_R_circuit.png");
 		break;
-	case CircuitComponent::RL:
-		if (circuitData->getConfig() == CircuitConfiguration::SERIES)
+	case Circuit::Components::RL:
+		if (circuitData->getConfig() == Circuit::Configuration::SERIES)
 			resource.append("AC_RL_series_circuit.png");
-		else if (circuitData->getConfig() == CircuitConfiguration::PARALLEL)
+		else if (circuitData->getConfig() == Circuit::Configuration::PARALLEL)
 			resource.append("AC_RL_parallel_circuit.png");
 		break;
-	case CircuitComponent::RC:
-		if (circuitData->getConfig() == CircuitConfiguration::SERIES)
+	case Circuit::Components::RC:
+		if (circuitData->getConfig() == Circuit::Configuration::SERIES)
 			resource.append("AC_RC_series_circuit.png");
-		else if (circuitData->getConfig() == CircuitConfiguration::PARALLEL)
+		else if (circuitData->getConfig() == Circuit::Configuration::PARALLEL)
 			resource.append("AC_RC_parallel_circuit.png");
 		break;
-	case CircuitComponent::RLC:
-		if (circuitData->getConfig() == CircuitConfiguration::SERIES)
+	case Circuit::Components::RLC:
+		if (circuitData->getConfig() == Circuit::Configuration::SERIES)
 			resource.append("AC_RLC_series_circuit.png");
-		else if (circuitData->getConfig() == CircuitConfiguration::PARALLEL)
+		else if (circuitData->getConfig() == Circuit::Configuration::PARALLEL)
 			resource.append("AC_RLC_parallel_circuit.png");
 		break;
 	}

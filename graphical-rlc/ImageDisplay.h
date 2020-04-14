@@ -22,8 +22,8 @@ private:
 	std::shared_ptr<CircuitData> circuitData;
 	Ui::ImageDisplay ui;
 
-	// Text inside ComboBox mapped to CircuitComponent
-	std::map<QString, CircuitComponent> stringToComponentMap;
+	// Text inside ComboBox mapped to Circuit::Components
+	std::map<QString, Circuit::Components> stringToComponentMap;
 private slots:
 	void updateComponents(const QString& text);
 	void updateCircuitPreview();

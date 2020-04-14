@@ -2,7 +2,7 @@
 #include "CircuitData.h"
 #include "UnitConverter.h"
 
-void CircuitData::setCircuitConfig(CircuitConfiguration config)
+void CircuitData::setCircuitConfig(Circuit::Configuration config)
 {
 	if (circuitConfig == config)
 		return;
@@ -10,12 +10,12 @@ void CircuitData::setCircuitConfig(CircuitConfiguration config)
 	emit configChanged();
 }
 
-void CircuitData::setComponent(Keys key, CircuitComponent val)
+void CircuitData::setComponent(Keys key, Circuit::Components val)
 {
-	CircuitComponent cc = *(componentMap[key]);
+	Circuit::Components cc = *(componentMap[key]);
 	if (key == Keys::CIRCUIT_COMPONENTS && val != cc)
 	{
-		circuitComponents = val;
+		Circuit::Components circuitComponenet= val;
 		emit componentsChanged();
 	}
 	else if (key == Keys::MEASURE_ACROSS && val != cc) {
@@ -24,78 +24,86 @@ void CircuitData::setComponent(Keys key, CircuitComponent val)
 	}
 }
 
-void CircuitData::setComponentValue(Keys key, double val, CircuitComponetScale scale)
+void CircuitData::setComponentValue(Keys key, double val, Circuit::ComponetScale scale)
 {
-	double storedVal = *(componentValueMap[key]);
+	Circuit::CircuitComponent storedVal = *(componentValueMap[key]);
 	double scaledVal = UnitConverter::scale(val, scale);
 	switch (key) {
 	case Keys::RESISTOR:
-		if (scaledVal != storedVal)
+		if (scaledVal != storedVal.value)
 		{
-			resistor = scaledVal;
+			resistor.value = scaledVal;
 			emit resistorChanged();
 			emit componentValueChanged(Keys::RESISTOR);
 		}
 		break;
 	case Keys::INDUCTOR:
-		if (scaledVal != storedVal)
+		if (scaledVal != storedVal.value)
 		{
-			inductor = scaledVal;
+			inductor.value = scaledVal;
 			emit inductorChanged();
 			emit componentValueChanged(Keys::INDUCTOR);
 		}
 		break;
 	case Keys::CAPACITOR:
-		if (scaledVal != storedVal)
+		if (scaledVal != storedVal.value)
 		{
-			capacitor = scaledVal;
+			capacitor.value = scaledVal;
 			emit capacitorChanged();
 			emit componentValueChanged(Keys::CAPACITOR);
+		}
+		break;
+	case Keys::OFFSET:
+		if (scaledVal != storedVal.value)
+		{
+			offset.value = scaledVal;
+			emit offsetChanged();
+			emit componentValueChanged(Keys::OFFSET);
 		}
 		break;
 	}
 }
 
-void CircuitData::changeVoltage(double val, CircuitComponetScale scale, CircuitUnit unit)
+void CircuitData::changeVoltage(double val, Circuit::ComponetScale scale, Circuit::Units unit)
 {
-	int unitMuliplier = unit == CircuitUnit::VOLTSP_P ? 2 : 1; // Wrong units will just be ignored
+	int unitMuliplier = unit == Circuit::Units::VOLTSP_P ? 2 : 1; // Wrong units will just be ignored
 	double scaledVal = UnitConverter::scale(val, scale) * unitMuliplier;
-	if (voltage != scaledVal)
+	if (voltage.value != scaledVal)
 	{
-		voltage = scaledVal;
+		voltage.value = scaledVal;
 		emit voltageChanged();
 		emit componentValueChanged(Keys::VOLTAGE);
 	}
 }
 
-void CircuitData::changeFrequency(double val, CircuitComponetScale scale, CircuitUnit unit)
+void CircuitData::changeFrequency(double val, Circuit::ComponetScale scale, Circuit::Units unit)
 {
 	// TODO: Add unique exception to throw
 	// TODO: Tell user what unit was provided
-	if ((unit != CircuitUnit::HERTZ) && (unit != CircuitUnit::RAD_PER_SEC))
+	if ((unit != Circuit::Units::HERTZ) && (unit != Circuit::Units::RAD_PER_SEC))
 	{
-		throw std::exception("Wrong Unit.\nExpected either CircuitUnit::HERTZ or CircuitUnit::RAD_PER_SEC.\n");
+		throw std::exception("Wrong Unit.\nExpected either Circuit::Units::HERTZ or Circuit::Units::RAD_PER_SEC.\n");
 	}
 	double scaledVal = UnitConverter::scale(val, scale);
-	if ((frequency != scaledVal) || (frequencyUnit != unit))
+	if ((frequency.value != scaledVal) || (frequency.unit != unit))
 	{
-		frequency = scaledVal;
-		frequencyUnit = unit;
+		frequency.value = scaledVal;
+		frequency.unit = unit;
 		emit frequencyChanged();
 		emit componentValueChanged(Keys::FREQUENCY);
 	}
 }
 
-void CircuitData::changePhase(double val, CircuitUnit unit)
+void CircuitData::changePhase(double val, Circuit::Units unit)
 {
-	if ((unit != CircuitUnit::RADIANS) && (unit != CircuitUnit::DEGREES))
+	if ((unit != Circuit::Units::RADIANS) && (unit != Circuit::Units::DEGREES))
 	{
-		throw std::exception("Wrong Unit.\nExpected either CircuitUnit::RADIANS or CircuitUnit::DEGREES.\n");
+		throw std::exception("Wrong Unit.\nExpected either Circuit::Units::RADIANS or Circuit::Units::DEGREES.\n");
 	}
-	if ((phase != val) || phaseUnit != unit)
+	if ((phase.value != val) || phase.unit != unit)
 	{
-		phase = val;
-		phaseUnit = unit;
+		phase.value = val;
+		phase.unit = unit;
 		emit phaseChanged();
 		emit componentValueChanged(Keys::PHASE);
 	}
@@ -103,25 +111,25 @@ void CircuitData::changePhase(double val, CircuitUnit unit)
 
 double CircuitData::calculateFrequency(bool outputInHz)
 {
-	if (outputInHz && frequencyUnit != CircuitUnit::HERTZ)
+	if (outputInHz && frequency.unit != Circuit::Units::HERTZ)
 	{
-		return UnitConverter::radToHz(frequency);
+		return UnitConverter::radToHz(frequency.value);
 	}
-	else if (!outputInHz && frequencyUnit == CircuitUnit::HERTZ)
+	else if (!outputInHz && frequency.unit == Circuit::Units::HERTZ)
 	{
-		return UnitConverter::hzToRad(frequency);
+		return UnitConverter::hzToRad(frequency.value);
 	}
-	return frequency;
+	return frequency.value;
 }
 
 double CircuitData::calculatePhase(bool outputInDegrees) {
-	if (outputInDegrees && phaseUnit != CircuitUnit::RADIANS)
+	if (outputInDegrees && phase.unit != Circuit::Units::RADIANS)
 	{
-		return UnitConverter::radToDeg(phase);
+		return UnitConverter::radToDeg(phase.value);
 	}
-	else if (!outputInDegrees && phaseUnit == CircuitUnit::DEGREES)
+	else if (!outputInDegrees && phase.unit == Circuit::Units::DEGREES)
 	{
-		return UnitConverter::degToRad(phase);
+		return UnitConverter::degToRad(phase.value);
 	}
-	return phase;
+	return phase.value;
 }

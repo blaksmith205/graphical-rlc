@@ -16,57 +16,55 @@ public:
 		OFFSET
 	};
 	// Keep source public because retrieval will probably not be that common
-	InputSignal voltageSource;
+	Circuit::InputSignal voltageSource;
 
 	// Functions to properly set data and emit changes
-	void setCircuitConfig(CircuitConfiguration config);
-	void setComponent(Keys key, CircuitComponent val);
-	void setComponentValue(Keys key, double val, CircuitComponetScale scale);
+	void setCircuitConfig(Circuit::Configuration config);
+	void setComponent(Keys key, Circuit::Components val);
+	void setComponentValue(Keys key, double val, Circuit::ComponetScale scale);
 
 	// Convience functions to set values without the keys
-	inline void setScaledResistor(double val, CircuitComponetScale scale) { setComponentValue(Keys::RESISTOR, val, scale); };
-	inline void setScaledInductor(double val, CircuitComponetScale scale) { setComponentValue(Keys::INDUCTOR, val, scale); };
-	inline void setScaledCapacitor(double val, CircuitComponetScale scale) { setComponentValue(Keys::CAPACITOR, val, scale); };
-	inline void setScaledVoltage(double val, CircuitComponetScale scale, CircuitUnit unit) { changeVoltage(val, scale==CircuitComponetScale::MILLI?scale:CircuitComponetScale::BASE, unit); };
-	inline void setScaledFrequency(double val, CircuitComponetScale scale, CircuitUnit unit) { changeFrequency(val, scale, unit); };
-	inline void setPhase(double val, CircuitUnit unit) { changePhase(val, unit); };
+	inline void setScaledResistor(double val, Circuit::ComponetScale scale) { setComponentValue(Keys::RESISTOR, val, scale); };
+	inline void setScaledInductor(double val, Circuit::ComponetScale scale) { setComponentValue(Keys::INDUCTOR, val, scale); };
+	inline void setScaledCapacitor(double val, Circuit::ComponetScale scale) { setComponentValue(Keys::CAPACITOR, val, scale); };
+	inline void setScaledVoltage(double val, Circuit::ComponetScale scale, Circuit::Units unit) { changeVoltage(val, scale==Circuit::ComponetScale::MILLI?scale:Circuit::ComponetScale::BASE, unit==Circuit::Units::VOLTSP_P?unit:Circuit::Units::VOLTS); };
+	inline void setScaledFrequency(double val, Circuit::ComponetScale scale, Circuit::Units unit) { changeFrequency(val, scale, unit); };
+	inline void setPhase(double val, Circuit::Units unit) { changePhase(val, unit); };
+	inline void setOffset(double val) { setComponentValue(Keys::OFFSET, val, Circuit::ComponetScale::BASE); };
 
 	// Group the types together to return all at once.
-	inline std::vector<CircuitComponent> components() { return {circuitComponents, measureAcross}; };
-	inline std::vector<double> componentValues() { return { resistor, inductor, capacitor, voltage, frequency, phase, offset }; };
+	const inline std::vector<Circuit::Components> components() { return { circuitComponents, measureAcross}; };
+	const inline std::vector<Circuit::CircuitComponent> componentValues() { return { resistor, inductor, capacitor, voltage, frequency, phase, offset }; };
 
 	// Return 1 element at a time using a map
-	inline CircuitConfiguration getConfig() { return circuitConfig; };
-	inline CircuitComponent getComponent(Keys key) { return *(componentMap[key]); };
-	inline double getComponentValue(Keys key) { return *(componentValueMap[key]); };
+	const inline Circuit::Configuration getConfig() { return circuitConfig; };
+	const inline Circuit::Components getComponent(Keys key) { return *(componentMap[key]); };
+	const inline Circuit::CircuitComponent getComponentValue(Keys key) { return *(componentValueMap[key]); };
 
 	// Calculate frequency depending on stored units. If outputInHz is true, the frequency is converted properly based on stored unit
 	double calculateFrequency(bool outputInHz);
 	// Calculate phase depending on stored units. If outputInDegrees is true, the phase is converted properly based on stored unit
 	double calculatePhase(bool outputInDegrees);
 private:
-	void changeVoltage(double val, CircuitComponetScale scale, CircuitUnit unit);
-	void changeFrequency(double val, CircuitComponetScale scale, CircuitUnit unit);
-	void changePhase(double val, CircuitUnit unit);
-	
+	void changeVoltage(double val, Circuit::ComponetScale scale, Circuit::Units unit);
+	void changeFrequency(double val, Circuit::ComponetScale scale, Circuit::Units unit);
+	void changePhase(double val, Circuit::Units unit);
 
 	// Data
-	CircuitConfiguration circuitConfig;
-	CircuitComponent circuitComponents;
-	CircuitComponent measureAcross;
-	double resistor;
-	double inductor;
-	double capacitor;
-	double voltage;
-	double frequency;
-	double phase;
-	double offset;
-	CircuitUnit frequencyUnit = CircuitUnit::HERTZ;
-	CircuitUnit phaseUnit = CircuitUnit::DEGREES;
+	Circuit::Configuration circuitConfig;
+	Circuit::Components circuitComponents;
+	Circuit::Components measureAcross;
+	Circuit::CircuitComponent resistor{ Circuit::Components::R, Circuit::Units::OHM };
+	Circuit::CircuitComponent inductor{ Circuit::Components::L, Circuit::Units::HENRY };
+	Circuit::CircuitComponent capacitor{ Circuit::Components::C, Circuit::Units::FARARDS };
+	Circuit::CircuitComponent voltage{ Circuit::Components::NONE, Circuit::Units::VOLTS };
+	Circuit::CircuitComponent frequency{ Circuit::Components::NONE, Circuit::Units::HERTZ };
+	Circuit::CircuitComponent phase{ Circuit::Components::NONE, Circuit::Units::DEGREES };
+	Circuit::CircuitComponent offset{ Circuit::Components::NONE, Circuit::Units::NONE };
 
 	// Maps for single element retrieval
-	std::map<Keys, CircuitComponent*> componentMap = { {Keys::CIRCUIT_COMPONENTS, &circuitComponents}, {Keys::MEASURE_ACROSS, &measureAcross} };
-	std::map<Keys, double*> componentValueMap = { {Keys::RESISTOR, &resistor}, {Keys::INDUCTOR, &inductor}, {Keys::CAPACITOR, &capacitor},
+	std::map<Keys, Circuit::Components*> componentMap = { {Keys::CIRCUIT_COMPONENTS, &circuitComponents}, {Keys::MEASURE_ACROSS, &measureAcross} };
+	std::map<Keys, Circuit::CircuitComponent*> componentValueMap = { {Keys::RESISTOR, &resistor}, {Keys::INDUCTOR, &inductor}, {Keys::CAPACITOR, &capacitor},
 		{Keys::VOLTAGE, &voltage}, {Keys::FREQUENCY, &frequency}, {Keys::PHASE, &phase}, {Keys::OFFSET, &offset} };
 signals:
 	void configChanged();
