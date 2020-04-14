@@ -17,6 +17,7 @@ private:
 
 private slots:
 	void updateCircuitConfig(int index);
+	void validateTextValue(const QString& text);
 
 signals:
 	void updateProgressBar(int visible);

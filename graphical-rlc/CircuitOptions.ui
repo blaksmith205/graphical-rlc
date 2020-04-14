@@ -36,7 +36,7 @@
     <widget class="QTabWidget" name="tabWidget">
      <property name="minimumSize">
       <size>
-       <width>70</width>
+       <width>0</width>
        <height>0</height>
       </size>
      </property>
@@ -72,22 +72,6 @@
            </property>
            <property name="text">
             <string>R</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QTextEdit" name="resistorText">
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>25</height>
-            </size>
            </property>
           </widget>
          </item>
@@ -139,38 +123,6 @@
            </property>
            <property name="text">
             <string>C</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QTextEdit" name="inductorText">
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>25</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QTextEdit" name="capacitorText">
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>25</height>
-            </size>
            </property>
           </widget>
          </item>
@@ -230,6 +182,27 @@
              <string>F</string>
             </property>
            </item>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="resistorText">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="inductorText">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="capacitorText">
+           <property name="text">
+            <string/>
+           </property>
           </widget>
          </item>
         </layout>
@@ -332,6 +305,20 @@
            </property>
           </widget>
          </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="offsetLabel">
+           <property name="text">
+            <string>Offset</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="voltageLabel">
+           <property name="text">
+            <string>Voltage</string>
+           </property>
+          </widget>
+         </item>
          <item row="2" column="0">
           <widget class="QLabel" name="phaseLabel">
            <property name="text">
@@ -358,6 +345,34 @@
            <item>
             <property name="text">
              <string>degrees</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QComboBox" name="voltageScale">
+           <property name="minimumSize">
+            <size>
+             <width>75</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="currentIndex">
+            <number>1</number>
+           </property>
+           <item>
+            <property name="text">
+             <string>mV</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>V</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Vpp</string>
             </property>
            </item>
           </widget>
@@ -405,111 +420,17 @@
            </item>
           </widget>
          </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="voltageLabel">
-           <property name="text">
-            <string>Voltage</string>
-           </property>
-          </widget>
-         </item>
          <item row="0" column="1">
-          <widget class="QTextEdit" name="voltageText">
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>25</height>
-            </size>
-           </property>
-          </widget>
+          <widget class="QLineEdit" name="voltageText"/>
          </item>
          <item row="1" column="1">
-          <widget class="QTextEdit" name="frequencyText">
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>25</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <widget class="QComboBox" name="voltageScale">
-           <property name="minimumSize">
-            <size>
-             <width>75</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="currentIndex">
-            <number>1</number>
-           </property>
-           <item>
-            <property name="text">
-             <string>mV</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>V</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Vpp</string>
-            </property>
-           </item>
-          </widget>
+          <widget class="QLineEdit" name="frequencyText"/>
          </item>
          <item row="2" column="1">
-          <widget class="QTextEdit" name="phaseText">
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>25</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="offsetLabel">
-           <property name="text">
-            <string>Offset</string>
-           </property>
-          </widget>
+          <widget class="QLineEdit" name="phaseText"/>
          </item>
          <item row="3" column="1">
-          <widget class="QTextEdit" name="offsetText">
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>25</height>
-            </size>
-           </property>
-          </widget>
+          <widget class="QLineEdit" name="offsetText"/>
          </item>
         </layout>
        </item>
