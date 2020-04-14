@@ -6,17 +6,17 @@ ImageDisplay::ImageDisplay(std::shared_ptr<CircuitData> data, QWidget* parent)
 	: QWidget(parent), circuitData(data)
 {
 	ui.setupUi(this);
-	buildMaps();
+	buildMap();
 	connect(ui.circuitSelection, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(updateComponents(const QString&)));
 	connect(circuitData.get(), SIGNAL(configChanged()), this, SLOT(updateCircuitPreview()));
 }
 
-void ImageDisplay::buildMaps()
+void ImageDisplay::buildMap()
 {
-	stringToComponentMap.insert(std::pair<QString, CircuitComponent>("R", CircuitComponent::R));
-	stringToComponentMap.insert(std::pair<QString, CircuitComponent>("RL", CircuitComponent::RL));
-	stringToComponentMap.insert(std::pair<QString, CircuitComponent>("RC", CircuitComponent::RC));
-	stringToComponentMap.insert(std::pair<QString, CircuitComponent>("RLC", CircuitComponent::RLC));
+	stringToComponentMap.insert({ "R", CircuitComponent::R });
+	stringToComponentMap.insert({ "RL", CircuitComponent::RL });
+	stringToComponentMap.insert({ "RC", CircuitComponent::RC });
+	stringToComponentMap.insert({ "RLC", CircuitComponent::RLC });
 }
 
 void ImageDisplay::showOutput(const QString& simulationOutput) {

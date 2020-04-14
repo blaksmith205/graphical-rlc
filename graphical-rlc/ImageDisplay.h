@@ -12,7 +12,7 @@ public:
 	ImageDisplay(std::shared_ptr<CircuitData> data, QWidget *parent = Q_NULLPTR);
 
 private:
-	void buildMaps();
+	void buildMap();
 	void showOutput(const QString& simulationOutput);
 	void showPreview(const QString& resource);
 
