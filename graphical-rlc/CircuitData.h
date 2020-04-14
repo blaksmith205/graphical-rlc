@@ -1,6 +1,6 @@
 #pragma once
 #include "CircuitInfo.h"
-
+#include "qmetatype.h"
 class CircuitData : QObject{
 	Q_OBJECT
 public:
@@ -27,9 +27,9 @@ public:
 	inline void setScaledResistor(double val, CircuitComponetScale scale) { setComponentValue(Keys::RESISTOR, val, scale); };
 	inline void setScaledInductor(double val, CircuitComponetScale scale) { setComponentValue(Keys::INDUCTOR, val, scale); };
 	inline void setScaledCapacitor(double val, CircuitComponetScale scale) { setComponentValue(Keys::CAPACITOR, val, scale); };
-	inline void setScaledVoltage(double val, CircuitComponetScale scale, CircuitUnit unit) { changeVoltage(val, scale, unit); };
+	inline void setScaledVoltage(double val, CircuitComponetScale scale, CircuitUnit unit) { changeVoltage(val, scale==CircuitComponetScale::MILLI?scale:CircuitComponetScale::BASE, unit); };
 	inline void setScaledFrequency(double val, CircuitComponetScale scale, CircuitUnit unit) { changeFrequency(val, scale, unit); };
-	inline void setPhase(double val, CircuitUnit unit) { changePhase(val, CircuitComponetScale::BASE, unit); };
+	inline void setPhase(double val, CircuitUnit unit) { changePhase(val, unit); };
 
 	// Group the types together to return all at once.
 	inline std::vector<CircuitComponent> components() { return {circuitComponents, measureAcross}; };
@@ -39,10 +39,16 @@ public:
 	inline CircuitConfiguration getConfig() { return circuitConfig; };
 	inline CircuitComponent getComponent(Keys key) { return *(componentMap[key]); };
 	inline double getComponentValue(Keys key) { return *(componentValueMap[key]); };
+
+	// Calculate frequency depending on stored units. If outputInHz is true, the frequency is converted properly based on stored unit
+	double calculateFrequency(bool outputInHz);
+	// Calculate phase depending on stored units. If outputInDegrees is true, the phase is converted properly based on stored unit
+	double calculatePhase(bool outputInDegrees);
 private:
 	void changeVoltage(double val, CircuitComponetScale scale, CircuitUnit unit);
 	void changeFrequency(double val, CircuitComponetScale scale, CircuitUnit unit);
-	void changePhase(double val, CircuitComponetScale scale, CircuitUnit unit);
+	void changePhase(double val, CircuitUnit unit);
+	
 
 	// Data
 	CircuitConfiguration circuitConfig;
@@ -55,7 +61,6 @@ private:
 	double frequency;
 	double phase;
 	double offset;
-	CircuitUnit voltageUnit = CircuitUnit::VOLTS;
 	CircuitUnit frequencyUnit = CircuitUnit::HERTZ;
 	CircuitUnit phaseUnit = CircuitUnit::DEGREES;
 
@@ -69,7 +74,7 @@ signals:
 	void measuredOutputChanged();
 
 	// General component value changed signal
-	void componentValueChanged();
+	void componentValueChanged(const Keys&);
 
 	// Specific component value changed signal
 
@@ -83,4 +88,4 @@ signals:
 	
 	void voltageSourceChanged();
 };
-
+Q_DECLARE_METATYPE(CircuitData::Keys);
