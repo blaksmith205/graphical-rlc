@@ -78,11 +78,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="mainwidget.qrc">
-      <Filter>Resource Files</Filter>
-    </QtRcc>
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="graphical-rlc.rc" />
   </ItemGroup>
   <ItemGroup>
@@ -109,5 +104,10 @@
     <QtMoc Include="CircuitData.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="circuitpreviews.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
   </ItemGroup>
 </Project>

@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/MainWidget">
+    <qresource prefix="/Previews">
         <file>Resources/AC_R_circuit.png</file>
         <file>Resources/AC_RC_parallel_circuit.png</file>
         <file>Resources/AC_RC_series_circuit.png</file>

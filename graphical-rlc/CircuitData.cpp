@@ -111,6 +111,7 @@ double CircuitData::calculateFrequency(bool outputInHz)
 	{
 		return UnitConverter::hzToRad(frequency);
 	}
+	return frequency;
 }
 
 double CircuitData::calculatePhase(bool outputInDegrees) {
@@ -122,4 +123,5 @@ double CircuitData::calculatePhase(bool outputInDegrees) {
 	{
 		return UnitConverter::degToRad(phase);
 	}
+	return phase;
 }

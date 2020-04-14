@@ -126,7 +126,7 @@
     <QtUic Include="MainWindow.ui" />
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="mainwidget.qrc" />
+    <QtRcc Include="circuitpreviews.qrc" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="graphical-rlc.rc" />

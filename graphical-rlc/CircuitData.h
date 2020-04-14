@@ -1,7 +1,7 @@
 #pragma once
 #include "CircuitInfo.h"
 #include "qmetatype.h"
-class CircuitData : QObject{
+class CircuitData : public QObject{
 	Q_OBJECT
 public:
 	enum class Keys {

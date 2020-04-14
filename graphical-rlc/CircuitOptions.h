@@ -17,4 +17,7 @@ private:
 
 private slots:
 	void updateCircuitConfig(int index);
+
+signals:
+	void updateProgressBar(int visible);
 };

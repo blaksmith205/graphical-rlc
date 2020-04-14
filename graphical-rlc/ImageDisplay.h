@@ -10,12 +10,24 @@ class ImageDisplay : public QWidget
 
 public:
 	ImageDisplay(std::shared_ptr<CircuitData> data, QWidget *parent = Q_NULLPTR);
-	~ImageDisplay();
 
 private:
+	void buildMaps();
+	void showOutput(const QString& simulationOutput);
+	void showPreview(const QString& resource);
+
+
+	QImage circuitImage;
+	QImage simulationImage;
 	std::shared_ptr<CircuitData> circuitData;
 	Ui::ImageDisplay ui;
 
+	// Text inside ComboBox mapped to CircuitComponent
+	std::map<QString, CircuitComponent> stringToComponentMap;
 private slots:
-	void updateComponents();
+	void updateComponents(const QString& text);
+	void updateCircuitPreview();
+
+signals:
+	void updateProgressBar(int visible);
 };
