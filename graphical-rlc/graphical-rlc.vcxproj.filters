@@ -13,9 +13,6 @@
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
-    <ClCompile Include="MainWindow.cpp">
-      <Filter>Source Files\ui</Filter>
-    </ClCompile>
     <ClCompile Include="CircuitOptions.cpp">
       <Filter>Source Files\ui</Filter>
     </ClCompile>
@@ -27,6 +24,9 @@
     </ClCompile>
     <ClCompile Include="UnitConverter.cpp">
       <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow.cpp">
+      <Filter>Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -92,9 +92,6 @@
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="MainWindow.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="CircuitOptions.h">
       <Filter>Header Files</Filter>
     </QtMoc>
@@ -102,6 +99,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="CircuitData.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="MainWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

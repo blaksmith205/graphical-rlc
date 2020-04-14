@@ -6,7 +6,7 @@
 #include "ResourceManager.h"
 
 MainWindow::MainWindow(std::shared_ptr<CircuitData> data, QWidget* parent)
-	: QMainWindow(parent), circuitsOptions(new CircuitOptions(data, ui.mainLeft)), outputImages(new ImageDisplay(data, ui.mainRight)), circuitData(data)
+	: QMainWindow(parent), circuitsOptions(new CircuitOptions(data, ui.mainLeft)), outputImages(new ImageDisplay(data, ui.mainRight))
 {
 	ui.setupUi(this);
 	ui.progressBar->setVisible(false);
@@ -17,9 +17,6 @@ MainWindow::MainWindow(std::shared_ptr<CircuitData> data, QWidget* parent)
 	// Connect the events to the proper handlers
 	//connect(ui.simulateButton, SIGNAL(clicked()), this, SLOT(startSimulationAsync()));
 	//connect(watcher, SIGNAL(finished()), this, SLOT(showOutput()));
-	//connect(ui.circircuitConfigSelection,
-	//	SIGNAL(currentIndexChanged(int)), this, SLOT(updateConfiguration(int)));
-	//connect(ui.circuitToSimulate, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(selectedComponets(const QString&)));
 }
 
 MainWindow::~MainWindow()
@@ -84,10 +81,6 @@ void MainWindow::startSimulation()
 	matlabPtr->eval(u"print('SimulationOutput/vdpSimulation','-dpng')");
 }
 
-void MainWindow::showOutput() {
-
-}
-
-void MainWindow::selectedComponets(const QString& text) {
-
+void MainWindow::changeProgressBar(int visible) {
+	ui.progressBar->setVisible(visible);
 }

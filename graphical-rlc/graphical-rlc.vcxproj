@@ -99,9 +99,9 @@
     <ClCompile Include="CircuitData.cpp" />
     <ClCompile Include="CircuitOptions.cpp" />
     <ClCompile Include="ImageDisplay.cpp" />
+    <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="MatlabManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -110,8 +110,8 @@
     <ClCompile Include="UnitConverter.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="UnitConverter.h" />
     <QtMoc Include="MainWindow.h" />
+    <ClInclude Include="UnitConverter.h" />
     <QtMoc Include="CircuitOptions.h" />
     <QtMoc Include="CircuitData.h" />
     <ClInclude Include="CircuitInfo.h" />
