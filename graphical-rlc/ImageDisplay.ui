@@ -80,7 +80,7 @@
       <widget class="QComboBox" name="circuitSelection">
        <item>
         <property name="text">
-         <string>R</string>
+         <string notr="true">R</string>
         </property>
        </item>
        <item>

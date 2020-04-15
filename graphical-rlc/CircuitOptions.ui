@@ -85,7 +85,7 @@
            </property>
            <item>
             <property name="text">
-             <string>Ω</string>
+             <string notr="true">Ω</string>
             </property>
            </item>
            <item>
@@ -136,7 +136,7 @@
            </property>
            <item>
             <property name="text">
-             <string>mH</string>
+             <string notr="true">mH</string>
             </property>
            </item>
            <item>
@@ -160,11 +160,11 @@
             </size>
            </property>
            <property name="currentIndex">
-            <number>1</number>
+            <number>0</number>
            </property>
            <item>
             <property name="text">
-             <string>nF</string>
+             <string notr="true">nF</string>
             </property>
            </item>
            <item>
@@ -339,7 +339,7 @@
            </property>
            <item>
             <property name="text">
-             <string>radians</string>
+             <string notr="true">radians</string>
             </property>
            </item>
            <item>
@@ -362,7 +362,7 @@
            </property>
            <item>
             <property name="text">
-             <string>mV</string>
+             <string notr="true">mV</string>
             </property>
            </item>
            <item>
@@ -390,7 +390,7 @@
            </property>
            <item>
             <property name="text">
-             <string>Hz</string>
+             <string notr="true">Hz</string>
             </property>
            </item>
            <item>

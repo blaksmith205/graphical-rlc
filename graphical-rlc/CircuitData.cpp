@@ -66,7 +66,8 @@ void CircuitData::setComponentValue(Keys key, double val, Circuit::ComponetScale
 
 void CircuitData::changeVoltage(double val, Circuit::ComponetScale scale, Circuit::Units unit)
 {
-	int unitMuliplier = unit == Circuit::Units::VOLTSP_P ? 2 : 1; // Wrong units will just be ignored
+	// If Vpp is selected as the unit, the voltage is the amplitude or half
+	double unitMuliplier = unit == Circuit::Units::VOLTSP_P ? 0.5 : 1; // Wrong units will just be ignored
 	double scaledVal = UnitConverter::scale(val, scale) * unitMuliplier;
 	if (voltage.value != scaledVal)
 	{

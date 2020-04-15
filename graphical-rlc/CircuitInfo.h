@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 namespace Circuit
 {
@@ -33,7 +33,7 @@ namespace Circuit
 		OHM,
 		HENRY,
 		FARARDS,
-		VOLTS,
+		VOLTS, // Amplitude
 		VOLTSP_P,
 		AMPS,
 		HERTZ,
@@ -63,4 +63,14 @@ namespace Circuit
 		double value;
 		Circuit::Units unit;
 	};
+
+	static std::map<Circuit::ComponetScale, const double> scaleMap = { {Circuit::ComponetScale::NANO, 1e-9}, {Circuit::ComponetScale::MICRO, 1e-6},
+	{Circuit::ComponetScale::MILLI, 1e-3}, {Circuit::ComponetScale::BASE, 1}, {Circuit::ComponetScale::KILO, 1e+3}, {Circuit::ComponetScale::MEGA, 1e+6},
+	{Circuit::ComponetScale::GIGA, 1e+9} };
+
+	// ComboBox unit mapped to respective unit. Can't figure out how to store Ω
+	static std::map<const QString, const Circuit::Units> unitMap= { {"H", Circuit::Units::HENRY},
+		{"F", Circuit::Units::FARARDS}, {"V", Circuit::Units::VOLTS}, {"Vpp", Circuit::Units::VOLTSP_P}, 
+		{"Hz", Circuit::Units::HERTZ}, {"rad/s", Circuit::Units::RAD_PER_SEC}, {"radians", Circuit::Units::RADIANS}, 
+		{"degrees", Circuit::Units::DEGREES}};
 }

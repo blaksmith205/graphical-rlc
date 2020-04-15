@@ -23,7 +23,7 @@ private:
 	Ui::ImageDisplay ui;
 
 	// Text inside ComboBox mapped to Circuit::Components
-	std::map<QString, Circuit::Components> stringToComponentMap;
+	std::map<const QString, const Circuit::Components> stringToComponentMap;
 private slots:
 	void updateComponents(const QString& text);
 	void updateCircuitPreview();

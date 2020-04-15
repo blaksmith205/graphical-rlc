@@ -30,7 +30,7 @@ public:
 	inline void setScaledVoltage(double val, Circuit::ComponetScale scale, Circuit::Units unit) { changeVoltage(val, scale==Circuit::ComponetScale::MILLI?scale:Circuit::ComponetScale::BASE, unit==Circuit::Units::VOLTSP_P?unit:Circuit::Units::VOLTS); };
 	inline void setScaledFrequency(double val, Circuit::ComponetScale scale, Circuit::Units unit) { changeFrequency(val, scale, unit); };
 	inline void setPhase(double val, Circuit::Units unit) { changePhase(val, unit); };
-	inline void setOffset(double val) { setComponentValue(Keys::OFFSET, val, Circuit::ComponetScale::BASE); };
+	inline void setScaledOffset(double val, Circuit::ComponetScale scale) { setComponentValue(Keys::OFFSET, val, scale); };
 
 	// Group the types together to return all at once.
 	const inline std::vector<Circuit::Components> components() { return { circuitComponents, measureAcross}; };
@@ -60,11 +60,11 @@ private:
 	Circuit::CircuitComponent voltage{ Circuit::Components::NONE, Circuit::Units::VOLTS };
 	Circuit::CircuitComponent frequency{ Circuit::Components::NONE, Circuit::Units::HERTZ };
 	Circuit::CircuitComponent phase{ Circuit::Components::NONE, Circuit::Units::DEGREES };
-	Circuit::CircuitComponent offset{ Circuit::Components::NONE, Circuit::Units::NONE };
+	Circuit::CircuitComponent offset{ Circuit::Components::NONE, Circuit::Units::VOLTS };
 
 	// Maps for single element retrieval
-	std::map<Keys, Circuit::Components*> componentMap = { {Keys::CIRCUIT_COMPONENTS, &circuitComponents}, {Keys::MEASURE_ACROSS, &measureAcross} };
-	std::map<Keys, Circuit::CircuitComponent*> componentValueMap = { {Keys::RESISTOR, &resistor}, {Keys::INDUCTOR, &inductor}, {Keys::CAPACITOR, &capacitor},
+	std::map<Keys, const Circuit::Components*> componentMap = { {Keys::CIRCUIT_COMPONENTS, &circuitComponents}, {Keys::MEASURE_ACROSS, &measureAcross} };
+	std::map<Keys, const Circuit::CircuitComponent*> componentValueMap = { {Keys::RESISTOR, &resistor}, {Keys::INDUCTOR, &inductor}, {Keys::CAPACITOR, &capacitor},
 		{Keys::VOLTAGE, &voltage}, {Keys::FREQUENCY, &frequency}, {Keys::PHASE, &phase}, {Keys::OFFSET, &offset} };
 signals:
 	void configChanged();
