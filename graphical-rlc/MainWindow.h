@@ -27,7 +27,7 @@ private:
 	std::map<QString, Circuit::Components> componentMap;
 private slots:
 	void startSimulationAsync();
-	void changeProgressBar(int visible);
+	void updateProgressBar(int visible);
 };
 
 

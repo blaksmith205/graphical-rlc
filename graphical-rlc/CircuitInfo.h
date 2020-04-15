@@ -73,4 +73,13 @@ namespace Circuit
 		{"F", Circuit::Units::FARARDS}, {"V", Circuit::Units::VOLTS}, {"Vpp", Circuit::Units::VOLTSP_P}, 
 		{"Hz", Circuit::Units::HERTZ}, {"rad/s", Circuit::Units::RAD_PER_SEC}, {"radians", Circuit::Units::RADIANS}, 
 		{"degrees", Circuit::Units::DEGREES}};
+
+	// Component Strings mapped to respective components
+	static std::map<const QString, const Circuit::Components> componentMap = { { "R", Circuit::Components::R }, { "L", Circuit::Components::L },
+	{ "C", Circuit::Components::C }, { "RL", Circuit::Components::RL },{ "RC", Circuit::Components::RC },
+	{ "RLC", Circuit::Components::RLC }, {"LC", Circuit::Components::LC}, {"", Circuit::Components::NONE} };
+
+	// Signal strings to respective input signal
+	static std::map<const QString, const Circuit::InputSignal> inputSignalMap = { { "Sinusoidal", Circuit::InputSignal::SINUSOIDAL }, { "Square", Circuit::InputSignal::SQUARE },
+		{"DC", Circuit::InputSignal::DC} };
 }

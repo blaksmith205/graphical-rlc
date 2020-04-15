@@ -15,6 +15,8 @@ MainWindow::MainWindow(std::shared_ptr<CircuitData> data, QWidget* parent)
 	ui.mainLeft->setLayout(circuitsOptions->layout());
 	ui.mainRight->setLayout(outputImages->layout());
 	// Connect the events to the proper handlers
+	connect(circuitsOptions, SIGNAL(loadingChanged(int)), this, SLOT(updateProgressBar(int)));
+	connect(outputImages, SIGNAL(loadingChanged(int)), this, SLOT(updateProgressBar(int)));
 	//connect(ui.simulateButton, SIGNAL(clicked()), this, SLOT(startSimulationAsync()));
 	//connect(watcher, SIGNAL(finished()), this, SLOT(showOutput()));
 }
@@ -81,6 +83,7 @@ void MainWindow::startSimulation()
 	matlabPtr->eval(u"print('SimulationOutput/vdpSimulation','-dpng')");
 }
 
-void MainWindow::changeProgressBar(int visible) {
-	ui.progressBar->setVisible(visible);
+// 0 means not visible
+void MainWindow::updateProgressBar(int visible) {
+	ui.progressBar->setVisible(visible!=0);
 }

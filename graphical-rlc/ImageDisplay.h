@@ -12,22 +12,17 @@ public:
 	ImageDisplay(std::shared_ptr<CircuitData> data, QWidget *parent = Q_NULLPTR);
 
 private:
-	void buildMap();
 	void showOutput(const QString& simulationOutput);
 	void showPreview(const QString& resource);
-
 
 	QImage circuitImage;
 	QImage simulationImage;
 	std::shared_ptr<CircuitData> circuitData;
 	Ui::ImageDisplay ui;
-
-	// Text inside ComboBox mapped to Circuit::Components
-	std::map<const QString, const Circuit::Components> stringToComponentMap;
 private slots:
 	void updateComponents(const QString& text);
 	void updateCircuitPreview();
 
 signals:
-	void updateProgressBar(int visible);
+	void loadingChanged(int visible);
 };

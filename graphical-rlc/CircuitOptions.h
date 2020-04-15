@@ -33,9 +33,11 @@ private:
 private slots:
 	void updateCircuitConfig(int index);
 	void updateCircuitScale(const QString& text);
+	void updateOutputComponent(const QString& text);
+	void updateInputSignal(const QString& text);
 	void simulateCircuit();
 	void validateTextValue(const QString& text);
 
 signals:
-	void updateProgressBar(int visible);
+	void loadingChanged(int visible);
 };

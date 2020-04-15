@@ -16,7 +16,10 @@ public:
 		OFFSET
 	};
 	// Keep source public because retrieval will probably not be that common
-	Circuit::InputSignal voltageSource;
+	Circuit::InputSignal voltageSource = Circuit::InputSignal::SINUSOIDAL;
+
+	// Call this to emit a voltageChanged signal
+	void setVoltageWaveform(Circuit::InputSignal signalWaveform);
 
 	// Functions to properly set data and emit changes
 	void setCircuitConfig(Circuit::Configuration config);
@@ -51,9 +54,9 @@ private:
 	void changePhase(double val, Circuit::Units unit);
 
 	// Data
-	Circuit::Configuration circuitConfig;
-	Circuit::Components circuitComponents;
-	Circuit::Components measureAcross;
+	Circuit::Configuration circuitConfig = Circuit::Configuration::SERIES;
+	Circuit::Components circuitComponents = Circuit::Components::R;
+	Circuit::Components measureAcross = Circuit::Components::R;
 	Circuit::CircuitComponent resistor{ Circuit::Components::R, Circuit::Units::OHM };
 	Circuit::CircuitComponent inductor{ Circuit::Components::L, Circuit::Units::HENRY };
 	Circuit::CircuitComponent capacitor{ Circuit::Components::C, Circuit::Units::FARARDS };
@@ -84,6 +87,6 @@ signals:
 	void phaseChanged();
 	void offsetChanged();
 	
-	void voltageSourceChanged();
+	void voltageSignalChanged();
 };
 Q_DECLARE_METATYPE(CircuitData::Keys);

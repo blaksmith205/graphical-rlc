@@ -6,24 +6,15 @@ ImageDisplay::ImageDisplay(std::shared_ptr<CircuitData> data, QWidget* parent)
 	: QWidget(parent), circuitData(data)
 {
 	ui.setupUi(this);
-	buildMap();
 	connect(ui.circuitSelection, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(updateComponents(const QString&)));
 	connect(circuitData.get(), SIGNAL(configChanged()), this, SLOT(updateCircuitPreview()));
-}
-
-void ImageDisplay::buildMap()
-{
-	stringToComponentMap.insert({ "R", Circuit::Components::R });
-	stringToComponentMap.insert({ "RL", Circuit::Components::RL });
-	stringToComponentMap.insert({ "RC", Circuit::Components::RC });
-	stringToComponentMap.insert({ "RLC", Circuit::Components::RLC });
 }
 
 void ImageDisplay::showOutput(const QString& simulationOutput) {
 	simulationImage = ResourceManager::loadImage(this, "generated/" + simulationOutput);
 	simulationImage = simulationImage.scaled(ui.simulationOutput->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 	ui.simulationOutput->setPixmap(QPixmap::fromImage(simulationImage));
-	emit updateProgressBar(0);
+	emit loadingChanged(0);
 }
 
 void ImageDisplay::showPreview(const QString& resource) {
@@ -33,7 +24,7 @@ void ImageDisplay::showPreview(const QString& resource) {
 }
 
 void ImageDisplay::updateComponents(const QString& text) {
-	Circuit::Components selectedComponents = stringToComponentMap[text];
+	Circuit::Components selectedComponents = Circuit::componentMap[text];
 	circuitData->setComponent(CircuitData::Keys::CIRCUIT_COMPONENTS, selectedComponents);
 	QString resource(":/Previews/Resources/");
 	switch (selectedComponents) {

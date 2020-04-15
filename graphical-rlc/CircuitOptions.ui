@@ -467,6 +467,11 @@
              <string>Square</string>
             </property>
            </item>
+           <item>
+            <property name="text">
+             <string>DC</string>
+            </property>
+           </item>
           </widget>
          </item>
         </layout>

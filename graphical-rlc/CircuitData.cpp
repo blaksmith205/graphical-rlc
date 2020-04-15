@@ -2,6 +2,15 @@
 #include "CircuitData.h"
 #include "UnitConverter.h"
 
+void CircuitData::setVoltageWaveform(Circuit::InputSignal signalWaveform)
+{
+	if (signalWaveform != voltageSource)
+	{
+		voltageSource = signalWaveform;
+		emit voltageSignalChanged();
+	}
+}
+
 void CircuitData::setCircuitConfig(Circuit::Configuration config)
 {
 	if (circuitConfig == config)
@@ -15,12 +24,14 @@ void CircuitData::setComponent(Keys key, Circuit::Components val)
 	Circuit::Components cc = *(componentMap[key]);
 	if (key == Keys::CIRCUIT_COMPONENTS && val != cc)
 	{
-		Circuit::Components circuitComponenet= val;
+		circuitComponents = val;
 		emit componentsChanged();
+		emit componentValueChanged(Keys::CIRCUIT_COMPONENTS);
 	}
 	else if (key == Keys::MEASURE_ACROSS && val != cc) {
 		measureAcross = val;
 		emit componentsChanged();
+		emit componentValueChanged(Keys::MEASURE_ACROSS);
 	}
 }
 

@@ -33,6 +33,10 @@ CircuitOptions::CircuitOptions(std::shared_ptr<CircuitData> data, QWidget *paren
 	}
 	// Update data configuration
 	connect(ui.circuitConfigSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(updateCircuitConfig(int)));
+	// Update which component to measure across
+	connect(ui.measureAcrossSelection, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(updateOutputComponent(const QString&)));
+	// Update the input signal waveform
+	connect(ui.signalTypeSelection, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(updateInputSignal(const QString&)));
 	// Save the data then simulate
 	connect(ui.simulateButton, SIGNAL(clicked()), this, SLOT(simulateCircuit()));
 }
@@ -139,11 +143,25 @@ void CircuitOptions::updateCircuitScale(const QString& text)
 	keyToScale[key] = newScale;
 }
 
+void CircuitOptions::updateOutputComponent(const QString& text)
+{
+	circuitData->setComponent(CircuitData::Keys::MEASURE_ACROSS, Circuit::componentMap[text]);
+}
+
+void CircuitOptions::updateInputSignal(const QString& text)
+{
+	circuitData->setVoltageWaveform(Circuit::inputSignalMap[text]);
+}
+
 void CircuitOptions::simulateCircuit()
 {
+	emit loadingChanged(1);
 	saveAllData();
 
 	// Simulate the circuit
+
+	// Update loading status
+	emit loadingChanged(0);
 }
 
 void CircuitOptions::validateTextValue(const QString& text) {
