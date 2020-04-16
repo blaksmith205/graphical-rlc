@@ -3,7 +3,8 @@
 
 // Variable Init
 const QString ResourceManager::ini_MatlabRootKey = QStringLiteral("Matlab/rootdir");
-const QString ResourceManager::matlabDllPath = QStringLiteral("/extern/bin/win64");
+const QString ResourceManager::matlabWindowsDLLSubDir = QStringLiteral("/extern/bin/win64");
+const QString ResourceManager::matlabWindowsLibSubDir = QStringLiteral("/extern/lib/win64/microsoft");
 const QDir* ResourceManager::defaultMatlabRoot = new QDir("C:/Program Files/MATLAB");
 QSettings* ResourceManager::config = new QSettings(QDir::currentPath() + "/GraphicalRLC.ini", QSettings::Format::IniFormat);
 
@@ -35,21 +36,21 @@ bool ResourceManager::isMatlabInstalled()
 {
     QRegularExpression matlabRe("/(R{1}20)\\w+/i");
     // First check if the location was setbefore:
-    if (ResourceManager::config->contains(ResourceManager::ini_MatlabRootKey)) return true;
+    if (config->contains(ini_MatlabRootKey)) return true;
 
     // First check if installed in default location and the extern directory is available
-    if (ResourceManager::defaultMatlabRoot->exists()) {
+    if (defaultMatlabRoot->exists()) {
         // Obtain the child directories from newest to oldest
-        QStringList subFiles = ResourceManager::defaultMatlabRoot->entryList(QDir::Filter::NoDotAndDotDot | QDir::Filter::Dirs, QDir::SortFlag::Reversed);
+        QStringList subFiles = defaultMatlabRoot->entryList(QDir::Filter::NoDotAndDotDot | QDir::Filter::Dirs, QDir::SortFlag::Reversed);
         for (auto subFile : subFiles) {
             auto exp = matlabRe.match(subFile);
             if (exp.isValid())
             {
-                QDir latestVersion = QDir(ResourceManager::defaultMatlabRoot->absolutePath() + QDir::separator() + subFile);
-                if (latestVersion.exists(latestVersion.absolutePath() + ResourceManager::matlabDllPath))
+                QDir latestVersion = QDir(defaultMatlabRoot->absolutePath() + QDir::separator() + subFile);
+                if (latestVersion.exists(latestVersion.absolutePath() + matlabWindowsDLLSubDir))
                 {
                     // Update config to have the latest root dir
-                    ResourceManager::updateConfig(ResourceManager::ini_MatlabRootKey, latestVersion.absolutePath());
+                    updateConfig(ini_MatlabRootKey, latestVersion.absolutePath());
                     return true;
                 }
             }
@@ -58,4 +59,22 @@ bool ResourceManager::isMatlabInstalled()
 
     // Can't find Matlab in default location
     return false;
+}
+
+const QByteArray ResourceManager::getEnvPath()
+{
+    QString path = qgetenv("PATH") + ";";
+    QDir dllPath = getMatlabFullDLLPath();
+    path += dllPath.toNativeSeparators(dllPath.absolutePath());
+    return path.toUtf8();
+}
+
+const QString ResourceManager::getMatlabFullDLLPath()
+{
+    return config->value(ini_MatlabRootKey).toString() + matlabWindowsDLLSubDir;
+}
+
+const QString ResourceManager::getMatlabFullLibPath()
+{
+    return config->value(ini_MatlabRootKey).toString() + matlabWindowsLibSubDir;
 }
