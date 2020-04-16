@@ -1,4 +1,7 @@
 ﻿#include "stdafx.h"
+#include <QtConcurrent>
+#include "MatlabEngine.hpp"
+#include "MatlabDataArray.hpp"
 #include "CircuitOptions.h"
 #include "UnitConverter.h"
 
@@ -6,6 +9,8 @@ CircuitOptions::CircuitOptions(std::shared_ptr<CircuitData> data, QWidget *paren
 	: QWidget(parent), circuitData(data)
 {
 	ui.setupUi(this);
+	future = new QFuture<void>();
+	watcher = new QFutureWatcher<void>();
 	buildMap();
 	// Limit TextFields to only accept numbers
 	lineEdits = this->findChildren<QLineEdit*>();
@@ -39,6 +44,8 @@ CircuitOptions::CircuitOptions(std::shared_ptr<CircuitData> data, QWidget *paren
 	connect(ui.signalTypeSelection, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(updateInputSignal(const QString&)));
 	// Save the data then simulate
 	connect(ui.simulateButton, SIGNAL(clicked()), this, SLOT(simulateCircuit()));
+	connect(ui.simulateButton, SIGNAL(clicked()), this, SLOT(startSimulationAsync()));
+	connect(watcher, SIGNAL(finished()), this, SLOT(simulationComplete()));
 }
 
 void CircuitOptions::updateCircuitConfig(int index) {
@@ -134,6 +141,55 @@ void CircuitOptions::saveAllData()
 	}
 }
 
+void CircuitOptions::startSimulation()
+{
+	using namespace matlab::engine;
+
+	// Connect to the MATLAB engine
+	std::unique_ptr<MATLABEngine> matlabPtr = startMATLAB();
+
+	// Create MATLAB data array factory
+	matlab::data::ArrayFactory factory;
+
+	// Create struct for simulation parameters
+	auto parameterStruct = factory.createStructArray({ 1,4 }, {
+		"SaveOutput",
+		"OutputSaveName",
+		"SaveTime",
+		"TimeSaveName" });
+	parameterStruct[0]["SaveOutput"] = factory.createCharArray("on");
+	parameterStruct[0]["OutputSaveName"] = factory.createCharArray("yOut");
+	parameterStruct[0]["SaveTime"] = factory.createCharArray("on");
+	parameterStruct[0]["TimeSaveName"] = factory.createCharArray("tOut");
+
+	// Put simulation parameter struct in MATLAB
+	matlabPtr->setVariable(u"parameterStruct", parameterStruct);
+
+	// Load vdp Simulink model
+	FutureResult<void> loadFuture = matlabPtr->evalAsync(u"load_system('vdp')");
+	//std::cout << "Loading Simulink model... " << std::endl;
+	std::future_status loadStatus;
+	do {
+		loadStatus = loadFuture.wait_for(std::chrono::seconds(1));
+	} while (loadStatus != std::future_status::ready);
+	//std::cout << "vdp model loaded\n";
+
+	// Run simulation
+	FutureResult<void> simFuture = matlabPtr->evalAsync(u"simOut = sim('vdp',parameterStruct);");
+	//std::cout << "Running simulation... " << std::endl;
+	std::future_status simStatus;
+	do {
+		simStatus = loadFuture.wait_for(std::chrono::seconds(1));
+	} while (simStatus != std::future_status::ready);
+	//std::cout << "vdp simulation complete\n";
+
+	// Get simulation data and create a graph
+	matlabPtr->eval(u"y = simOut.get('yOut');");
+	matlabPtr->eval(u"t = simOut.get('tOut');");
+	matlabPtr->eval(u"f = figure('visible','off'); plot(t,y);"); // Polt without showing the image
+	matlabPtr->eval(u"print('generated/vdpSimulation','-dpng')");
+}
+
 void CircuitOptions::updateCircuitScale(const QString& text)
 {
 	CircuitData::Keys key = qobjectToDataMap[QObject::sender()];
@@ -157,11 +213,19 @@ void CircuitOptions::simulateCircuit()
 {
 	emit loadingChanged(1);
 	saveAllData();
+}
 
-	// Simulate the circuit
+void CircuitOptions::simulationComplete()
+{
+	// Obtain the name of the created file ...
+	emit simulationOutputChanged("vdpSimulation.png");
+}
 
-	// Update loading status
-	emit loadingChanged(0);
+void CircuitOptions::startSimulationAsync()
+{
+	emit loadingChanged(1);
+	*future = QtConcurrent::run(this, &CircuitOptions::startSimulation);
+	watcher->setFuture(*future);
 }
 
 void CircuitOptions::validateTextValue(const QString& text) {

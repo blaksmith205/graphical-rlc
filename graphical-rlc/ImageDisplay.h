@@ -12,7 +12,6 @@ public:
 	ImageDisplay(std::shared_ptr<CircuitData> data, QWidget *parent = Q_NULLPTR);
 
 private:
-	void showOutput(const QString& simulationOutput);
 	void showPreview(const QString& resource);
 
 	QImage circuitImage;
@@ -22,6 +21,7 @@ private:
 private slots:
 	void updateComponents(const QString& text);
 	void updateCircuitPreview();
+	void showOutput(const QString& simulationOutput);
 
 signals:
 	void loadingChanged(int visible);

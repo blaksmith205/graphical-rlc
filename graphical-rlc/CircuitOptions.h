@@ -11,16 +11,26 @@ class CircuitOptions : public QWidget
 public:
 	CircuitOptions(std::shared_ptr<CircuitData> data, QWidget *parent = Q_NULLPTR);
 
+// Functions
 private:
 	void buildMap();
 	Circuit::Units extractBaseUnit(const QString& text);
 	inline Circuit::ComponetScale parseForScale(const QString& text);
 	// Save the data once the button is pressed 
 	void saveAllData();
+	void startSimulation();
+
+//Data
+private:
+	// Simulation related
+	QFuture<void>* future;
+	QFutureWatcher<void>* watcher;
 
 	std::shared_ptr<CircuitData> circuitData;
 	QList<QLineEdit*> lineEdits;
 	Ui::CircuitOptions ui;
+	
+	// Maps
 	std::map<QObject*, CircuitData::Keys> qobjectToDataMap;
 	// Map between ComboBox first char and scale;
 	std::map<const QChar, const Circuit::ComponetScale> qcharToScale = { {'n', Circuit::ComponetScale::NANO}, {'m', Circuit::ComponetScale::MILLI},
@@ -36,8 +46,11 @@ private slots:
 	void updateOutputComponent(const QString& text);
 	void updateInputSignal(const QString& text);
 	void simulateCircuit();
+	void simulationComplete();
+	void startSimulationAsync();
 	void validateTextValue(const QString& text);
 
 signals:
 	void loadingChanged(int visible);
+	void simulationOutputChanged(const QString& fileName);
 };

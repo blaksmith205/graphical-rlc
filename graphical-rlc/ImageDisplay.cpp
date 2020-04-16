@@ -10,13 +10,6 @@ ImageDisplay::ImageDisplay(std::shared_ptr<CircuitData> data, QWidget* parent)
 	connect(circuitData.get(), SIGNAL(configChanged()), this, SLOT(updateCircuitPreview()));
 }
 
-void ImageDisplay::showOutput(const QString& simulationOutput) {
-	simulationImage = ResourceManager::loadImage(this, "generated/" + simulationOutput);
-	simulationImage = simulationImage.scaled(ui.simulationOutput->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-	ui.simulationOutput->setPixmap(QPixmap::fromImage(simulationImage));
-	emit loadingChanged(0);
-}
-
 void ImageDisplay::showPreview(const QString& resource) {
 	circuitImage = ResourceManager::loadImage(this, resource);
 	circuitImage = circuitImage.scaled(ui.circuitPreview->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
@@ -58,4 +51,9 @@ void ImageDisplay::updateCircuitPreview()
 	updateComponents(ui.circuitSelection->currentText());
 }
 
-
+void ImageDisplay::showOutput(const QString& simulationOutput) {
+	simulationImage = ResourceManager::loadImage(this, "generated/" + simulationOutput);
+	simulationImage = simulationImage.scaled(ui.simulationOutput->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+	ui.simulationOutput->setPixmap(QPixmap::fromImage(simulationImage));
+	emit loadingChanged(0);
+}
