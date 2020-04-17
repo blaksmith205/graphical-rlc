@@ -37,7 +37,8 @@ void MatlabManager::setVariables(std::unique_ptr<MATLABEngine>& engine, const st
 {
 	auto componentValues = data->componentValues();
 	matlab::data::ArrayFactory factory;
-	for (int i = 0; i < componentValues.size(); i++) {
+	for (int i = 0; i < componentValues.size(); i++)
+	{
 		auto scalar = factory.createScalar<double>(componentValues[i].value);
 		engine->setVariable(variableNames[i], scalar);
 	}

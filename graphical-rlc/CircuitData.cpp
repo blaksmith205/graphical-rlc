@@ -28,7 +28,8 @@ void CircuitData::setComponent(Keys key, Circuit::Components val)
 		emit componentsChanged();
 		emit componentValueChanged(Keys::CIRCUIT_COMPONENTS);
 	}
-	else if (key == Keys::MEASURE_ACROSS && val != cc) {
+	else if (key == Keys::MEASURE_ACROSS && val != cc)
+	{
 		measureAcross = val;
 		emit componentsChanged();
 		emit componentValueChanged(Keys::MEASURE_ACROSS);
@@ -134,7 +135,8 @@ double CircuitData::calculateFrequency(bool outputInHz)
 	return frequency.value;
 }
 
-double CircuitData::calculatePhase(bool outputInDegrees) {
+double CircuitData::calculatePhase(bool outputInDegrees)
+{
 	if (outputInDegrees && phase.unit != Circuit::Units::RADIANS)
 	{
 		return UnitConverter::radToDeg(phase.value);

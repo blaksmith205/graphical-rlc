@@ -5,7 +5,7 @@
 #include <QtWidgets/QApplication>
 
 // TODO: Add newest matlab/extern libs to program path
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
 	if (ResourceManager::isMatlabInstalled())
 	{

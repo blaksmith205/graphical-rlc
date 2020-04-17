@@ -15,6 +15,7 @@ MainWindow::MainWindow(std::shared_ptr<CircuitData> data, QWidget* parent)
 }
 
 // 0 means not visible
-void MainWindow::updateProgressBar(int visible) {
-	ui.progressBar->setVisible(visible!=0);
+void MainWindow::updateProgressBar(int visible)
+{
+	ui.progressBar->setVisible(visible != 0);
 }

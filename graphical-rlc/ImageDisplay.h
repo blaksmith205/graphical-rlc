@@ -4,12 +4,11 @@
 #include "ui_ImageDisplay.h"
 #include "CircuitData.h"
 
-class ImageDisplay : public QWidget
-{
+class ImageDisplay : public QWidget {
 	Q_OBJECT
 
 public:
-	ImageDisplay(std::shared_ptr<CircuitData> data, QWidget *parent = Q_NULLPTR);
+	ImageDisplay(std::shared_ptr<CircuitData> data, QWidget* parent = Q_NULLPTR);
 
 private:
 	void showPreview(const QString& resource);

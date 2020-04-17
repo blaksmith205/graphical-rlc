@@ -1,7 +1,7 @@
 #pragma once
 #include "CircuitInfo.h"
 #include "qmetatype.h"
-class CircuitData : public QObject{
+class CircuitData : public QObject {
 	Q_OBJECT
 public:
 	enum class Keys {
@@ -30,13 +30,13 @@ public:
 	inline void setScaledResistor(double val, Circuit::ComponetScale scale) { setComponentValue(Keys::RESISTOR, val, scale); };
 	inline void setScaledInductor(double val, Circuit::ComponetScale scale) { setComponentValue(Keys::INDUCTOR, val, scale); };
 	inline void setScaledCapacitor(double val, Circuit::ComponetScale scale) { setComponentValue(Keys::CAPACITOR, val, scale); };
-	inline void setScaledVoltage(double val, Circuit::ComponetScale scale, Circuit::Units unit) { changeVoltage(val, scale==Circuit::ComponetScale::MILLI?scale:Circuit::ComponetScale::BASE, unit==Circuit::Units::VOLTSP_P?unit:Circuit::Units::VOLTS); };
+	inline void setScaledVoltage(double val, Circuit::ComponetScale scale, Circuit::Units unit) { changeVoltage(val, scale == Circuit::ComponetScale::MILLI ? scale : Circuit::ComponetScale::BASE, unit == Circuit::Units::VOLTSP_P ? unit : Circuit::Units::VOLTS); };
 	inline void setScaledFrequency(double val, Circuit::ComponetScale scale, Circuit::Units unit) { changeFrequency(val, scale, unit); };
 	inline void setPhase(double val, Circuit::Units unit) { changePhase(val, unit); };
 	inline void setScaledOffset(double val, Circuit::ComponetScale scale) { setComponentValue(Keys::OFFSET, val, scale); };
 
 	// Group the types together to return all at once.
-	const inline std::vector<Circuit::Components> components() { return { circuitComponents, measureAcross}; };
+	const inline std::vector<Circuit::Components> components() { return { circuitComponents, measureAcross }; };
 	// Returns values for resistor, inductor, capacitor, voltage, frequency, phase, offset in that order
 	const inline std::vector<Circuit::CircuitComponent> componentValues() { return { resistor, inductor, capacitor, voltage, frequency, phase, offset }; };
 
@@ -87,7 +87,7 @@ signals:
 	void frequencyChanged();
 	void phaseChanged();
 	void offsetChanged();
-	
+
 	void voltageSignalChanged();
 };
 Q_DECLARE_METATYPE(CircuitData::Keys);

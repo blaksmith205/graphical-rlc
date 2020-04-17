@@ -4,7 +4,7 @@
 #include "UnitConverter.h"
 #include "MatlabManager.h"
 
-CircuitOptions::CircuitOptions(std::shared_ptr<CircuitData> data, QWidget *parent)
+CircuitOptions::CircuitOptions(std::shared_ptr<CircuitData> data, QWidget* parent)
 	: QWidget(parent), circuitData(data)
 {
 	ui.setupUi(this);
@@ -25,14 +25,16 @@ CircuitOptions::CircuitOptions(std::shared_ptr<CircuitData> data, QWidget *paren
 			lineEdit->setValidator(dblValidator);
 			connect(lineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(validateTextValue(const QString&)));
 		}
-		else {
+		else
+		{
 			dblValidator->setBottom(-(top - 1));
 			lineEdit->setValidator(dblValidator);
 			connect(lineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(validateTextValue(const QString&)));
 		}
 	}
 	// Update the scales per key
-	for (auto comboBox : this->findChildren<QComboBox*>()) {
+	for (auto comboBox : this->findChildren<QComboBox*>())
+	{
 		connect(comboBox, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(updateCircuitScale(const QString&)));
 	}
 	// Hide the fields that don't relate to the components
@@ -54,7 +56,8 @@ CircuitOptions::~CircuitOptions()
 	matlab::engine::terminateEngineClient();
 }
 
-void CircuitOptions::displayComponentFields() {
+void CircuitOptions::displayComponentFields()
+{
 	Circuit::Components selectedComponents = circuitData->getComponent(CircuitData::Keys::CIRCUIT_COMPONENTS);
 	bool isInductorSelected = false;
 	bool isCapacitorSelected = false;
@@ -84,7 +87,8 @@ void CircuitOptions::displayComponentFields() {
 	validateFieldData(ui.capacitorText, isCapacitorSelected);
 }
 
-void CircuitOptions::updateCircuitConfig(int index) {
+void CircuitOptions::updateCircuitConfig(int index)
+{
 	switch (index) {
 	case 0:
 		circuitData->setCircuitConfig(Circuit::Configuration::SERIES);
@@ -97,13 +101,13 @@ void CircuitOptions::updateCircuitConfig(int index) {
 
 void CircuitOptions::buildMap()
 {
-	qobjectToDataMap.insert({ui.resistorText, CircuitData::Keys::RESISTOR});
-	qobjectToDataMap.insert({ui.inductorText, CircuitData::Keys::INDUCTOR});
-	qobjectToDataMap.insert({ui.capacitorText, CircuitData::Keys::CAPACITOR});
-	qobjectToDataMap.insert({ui.voltageText, CircuitData::Keys::VOLTAGE});
-	qobjectToDataMap.insert({ui.frequencyText, CircuitData::Keys::FREQUENCY});
-	qobjectToDataMap.insert({ui.phaseText, CircuitData::Keys::PHASE});
-	qobjectToDataMap.insert({ui.offsetText, CircuitData::Keys::OFFSET});
+	qobjectToDataMap.insert({ ui.resistorText, CircuitData::Keys::RESISTOR });
+	qobjectToDataMap.insert({ ui.inductorText, CircuitData::Keys::INDUCTOR });
+	qobjectToDataMap.insert({ ui.capacitorText, CircuitData::Keys::CAPACITOR });
+	qobjectToDataMap.insert({ ui.voltageText, CircuitData::Keys::VOLTAGE });
+	qobjectToDataMap.insert({ ui.frequencyText, CircuitData::Keys::FREQUENCY });
+	qobjectToDataMap.insert({ ui.phaseText, CircuitData::Keys::PHASE });
+	qobjectToDataMap.insert({ ui.offsetText, CircuitData::Keys::OFFSET });
 	qobjectToDataMap.insert({ ui.resistorScale, CircuitData::Keys::RESISTOR });
 	qobjectToDataMap.insert({ ui.inductorScale, CircuitData::Keys::INDUCTOR });
 	qobjectToDataMap.insert({ ui.capacitorScale, CircuitData::Keys::CAPACITOR });
@@ -135,7 +139,7 @@ Circuit::Units CircuitOptions::extractBaseUnit(const QString& text)
 	// Remove the scale and extra spaces
 	auto substr = text.constData();
 	substr = &substr[1];
-	
+
 	return Circuit::unitMap[QString(substr).trimmed()];
 }
 
@@ -163,12 +167,12 @@ void CircuitOptions::validateFieldData(const QObject* lineEdit, bool isValid)
 
 void CircuitOptions::saveAllData()
 {
-	for (auto lineEdit : lineEdits) {
+	for (auto lineEdit : lineEdits)
+	{
 		CircuitData::Keys key = qobjectToDataMap[lineEdit];
 		QString text = lineEdit->text();
 		double val = text.toDouble();
-		switch (key)
-		{
+		switch (key) {
 		case CircuitData::Keys::RESISTOR:
 			circuitData->setComponentValue(key, val, keyToScale[key]);
 			break;
@@ -253,9 +257,10 @@ void CircuitOptions::startSimulationAsync()
 	watcher->setFuture(*future);
 }
 
-void CircuitOptions::validateTextValue(const QString& text) {
+void CircuitOptions::validateTextValue(const QString& text)
+{
 	// Obtain the sending lineEdit
-	QLineEdit* lineEdit = (QLineEdit*) QObject::sender();
+	QLineEdit* lineEdit = (QLineEdit*)QObject::sender();
 	QString str = text;
 	// Validate the entire double
 	int i = 0;

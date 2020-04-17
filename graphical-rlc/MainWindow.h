@@ -6,12 +6,11 @@
 #include "CircuitOptions.h"
 #include "ImageDisplay.h"
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
 	Q_OBJECT
 
 public:
-	MainWindow(std::shared_ptr<CircuitData> data, QWidget *parent = Q_NULLPTR);
+	MainWindow(std::shared_ptr<CircuitData> data, QWidget* parent = Q_NULLPTR);
 private:
 	// Custom left and right widgets
 	CircuitOptions* circuitsOptions;
