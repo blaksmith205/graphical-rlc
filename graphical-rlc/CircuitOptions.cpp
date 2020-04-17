@@ -1,9 +1,8 @@
 ﻿#include "stdafx.h"
 #include <QtConcurrent>
-#include "MatlabEngine.hpp"
-#include "MatlabDataArray.hpp"
 #include "CircuitOptions.h"
 #include "UnitConverter.h"
+#include "MatlabManager.h"
 
 CircuitOptions::CircuitOptions(std::shared_ptr<CircuitData> data, QWidget *parent)
 	: QWidget(parent), circuitData(data)
@@ -48,13 +47,18 @@ CircuitOptions::CircuitOptions(std::shared_ptr<CircuitData> data, QWidget *paren
 	connect(watcher, SIGNAL(finished()), this, SLOT(simulationComplete()));
 }
 
+CircuitOptions::~CircuitOptions()
+{
+	matlab::engine::terminateEngineClient();
+}
+
 void CircuitOptions::updateCircuitConfig(int index) {
 	switch (index) {
 	case 0:
 		circuitData->setCircuitConfig(Circuit::Configuration::SERIES);
 		break;
 	case 1:
-		circuitData->setCircuitConfig(Circuit::Configuration::PARALLEL);		
+		circuitData->setCircuitConfig(Circuit::Configuration::PARALLEL);
 		break;
 	}
 }
@@ -103,6 +107,13 @@ Circuit::Units CircuitOptions::extractBaseUnit(const QString& text)
 	return Circuit::unitMap[QString(substr).trimmed()];
 }
 
+std::u16string CircuitOptions::getBestModel()
+{
+	// TODO: Find the best model for the supplied data
+	// Look at the components to measure across and the circuit connection
+	return u"vdp";
+}
+
 inline Circuit::ComponetScale CircuitOptions::parseForScale(const QString& text)
 {
 	// Account for Omega and normal bases
@@ -144,50 +155,21 @@ void CircuitOptions::saveAllData()
 void CircuitOptions::startSimulation()
 {
 	using namespace matlab::engine;
+	// Create a matlab manager
+	MatlabManager manager;
+	manager.setVariables(circuitData);
 
-	// Connect to the MATLAB engine
-	std::unique_ptr<MATLABEngine> matlabPtr = startMATLAB();
+	// Setup default simulation parameters
+	manager.setSimulationParameters();
 
-	// Create MATLAB data array factory
-	matlab::data::ArrayFactory factory;
+	// Obtain the name of the best model
+	std::u16string bestModel = getBestModel();
+	// Simulate the model
+	manager.loadModelAndSimulate(bestModel);
 
-	// Create struct for simulation parameters
-	auto parameterStruct = factory.createStructArray({ 1,4 }, {
-		"SaveOutput",
-		"OutputSaveName",
-		"SaveTime",
-		"TimeSaveName" });
-	parameterStruct[0]["SaveOutput"] = factory.createCharArray("on");
-	parameterStruct[0]["OutputSaveName"] = factory.createCharArray("yOut");
-	parameterStruct[0]["SaveTime"] = factory.createCharArray("on");
-	parameterStruct[0]["TimeSaveName"] = factory.createCharArray("tOut");
-
-	// Put simulation parameter struct in MATLAB
-	matlabPtr->setVariable(u"parameterStruct", parameterStruct);
-
-	// Load vdp Simulink model
-	FutureResult<void> loadFuture = matlabPtr->evalAsync(u"load_system('vdp')");
-	//std::cout << "Loading Simulink model... " << std::endl;
-	std::future_status loadStatus;
-	do {
-		loadStatus = loadFuture.wait_for(std::chrono::seconds(1));
-	} while (loadStatus != std::future_status::ready);
-	//std::cout << "vdp model loaded\n";
-
-	// Run simulation
-	FutureResult<void> simFuture = matlabPtr->evalAsync(u"simOut = sim('vdp',parameterStruct);");
-	//std::cout << "Running simulation... " << std::endl;
-	std::future_status simStatus;
-	do {
-		simStatus = loadFuture.wait_for(std::chrono::seconds(1));
-	} while (simStatus != std::future_status::ready);
-	//std::cout << "vdp simulation complete\n";
-
-	// Get simulation data and create a graph
-	matlabPtr->eval(u"y = simOut.get('yOut');");
-	matlabPtr->eval(u"t = simOut.get('tOut');");
-	matlabPtr->eval(u"f = figure('visible','off'); plot(t,y);"); // Polt without showing the image
-	matlabPtr->eval(u"print('generated/vdpSimulation','-dpng')");
+	outputName = bestModel + u"SimulationOutput";
+	// Get the results
+	manager.saveResults(outputName);
 }
 
 void CircuitOptions::updateCircuitScale(const QString& text)
@@ -217,8 +199,7 @@ void CircuitOptions::simulateCircuit()
 
 void CircuitOptions::simulationComplete()
 {
-	// Obtain the name of the created file ...
-	emit simulationOutputChanged("vdpSimulation.png");
+	emit simulationOutputChanged(QString::fromStdU16String(outputName));
 }
 
 void CircuitOptions::startSimulationAsync()

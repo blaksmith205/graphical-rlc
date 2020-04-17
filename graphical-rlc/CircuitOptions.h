@@ -10,11 +10,12 @@ class CircuitOptions : public QWidget
 
 public:
 	CircuitOptions(std::shared_ptr<CircuitData> data, QWidget *parent = Q_NULLPTR);
-
+	~CircuitOptions();
 // Functions
 private:
 	void buildMap();
 	Circuit::Units extractBaseUnit(const QString& text);
+	std::u16string getBestModel();
 	inline Circuit::ComponetScale parseForScale(const QString& text);
 	// Save the data once the button is pressed 
 	void saveAllData();
@@ -25,6 +26,7 @@ private:
 	// Simulation related
 	QFuture<void>* future;
 	QFutureWatcher<void>* watcher;
+	QString outputName;
 
 	std::shared_ptr<CircuitData> circuitData;
 	QList<QLineEdit*> lineEdits;

@@ -52,7 +52,7 @@ void ImageDisplay::updateCircuitPreview()
 }
 
 void ImageDisplay::showOutput(const QString& simulationOutput) {
-	simulationImage = ResourceManager::loadImage(this, "generated/" + simulationOutput);
+	simulationImage = ResourceManager::loadImage(this, "generated/" + simulationOutput + ".png");
 	simulationImage = simulationImage.scaled(ui.simulationOutput->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 	ui.simulationOutput->setPixmap(QPixmap::fromImage(simulationImage));
 	emit loadingChanged(0);

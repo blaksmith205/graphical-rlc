@@ -37,6 +37,7 @@ public:
 
 	// Group the types together to return all at once.
 	const inline std::vector<Circuit::Components> components() { return { circuitComponents, measureAcross}; };
+	// Returns values for resistor, inductor, capacitor, voltage, frequency, phase, offset in that order
 	const inline std::vector<Circuit::CircuitComponent> componentValues() { return { resistor, inductor, capacitor, voltage, frequency, phase, offset }; };
 
 	// Return 1 element at a time using a map
