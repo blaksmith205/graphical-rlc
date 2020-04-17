@@ -47,7 +47,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="circuitpreviews.qrc">:/Previews/Resources/AC_R_circuit.png</pixmap>
+      <pixmap resource="circuitpreviews.qrc">:/Previews/Resources/AC_RLC_series_circuit.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -78,6 +78,9 @@
      </item>
      <item>
       <widget class="QComboBox" name="circuitSelection">
+       <property name="currentIndex">
+        <number>3</number>
+       </property>
        <item>
         <property name="text">
          <string notr="true">R</string>

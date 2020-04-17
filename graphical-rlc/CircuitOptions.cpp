@@ -35,6 +35,8 @@ CircuitOptions::CircuitOptions(std::shared_ptr<CircuitData> data, QWidget *paren
 	for (auto comboBox : this->findChildren<QComboBox*>()) {
 		connect(comboBox, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(updateCircuitScale(const QString&)));
 	}
+	// Hide the fields that don't relate to the components
+	connect(circuitData.get(), SIGNAL(componentsChanged()), this, SLOT(displayComponentFields()));
 	// Update data configuration
 	connect(ui.circuitConfigSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(updateCircuitConfig(int)));
 	// Update which component to measure across
@@ -50,6 +52,36 @@ CircuitOptions::CircuitOptions(std::shared_ptr<CircuitData> data, QWidget *paren
 CircuitOptions::~CircuitOptions()
 {
 	matlab::engine::terminateEngineClient();
+}
+
+void CircuitOptions::displayComponentFields() {
+	Circuit::Components selectedComponents = circuitData->getComponent(CircuitData::Keys::CIRCUIT_COMPONENTS);
+	bool isInductorSelected = false;
+	bool isCapacitorSelected = false;
+	switch (selectedComponents) {
+	case Circuit::Components::R:
+		break;
+	case Circuit::Components::RL:
+		isInductorSelected = true;
+		break;
+	case Circuit::Components::RC:
+		isCapacitorSelected = true;
+		break;
+	case Circuit::Components::RLC:
+		isInductorSelected = true;
+		isCapacitorSelected = true;
+		break;
+	}
+	// Inductor
+	ui.inductorLabel->setVisible(isInductorSelected);
+	ui.inductorText->setVisible(isInductorSelected);
+	ui.inductorScale->setVisible(isInductorSelected);
+	validateFieldData(ui.inductorText, isInductorSelected);
+	// Capacitor
+	ui.capacitorLabel->setVisible(isCapacitorSelected);
+	ui.capacitorText->setVisible(isCapacitorSelected);
+	ui.capacitorScale->setVisible(isCapacitorSelected);
+	validateFieldData(ui.capacitorText, isCapacitorSelected);
 }
 
 void CircuitOptions::updateCircuitConfig(int index) {
@@ -123,6 +155,12 @@ inline Circuit::ComponetScale CircuitOptions::parseForScale(const QString& text)
 	return text.size() == 1 ? Circuit::ComponetScale::BASE : qcharToScale[text.at(0)];
 }
 
+void CircuitOptions::validateFieldData(const QObject* lineEdit, bool isValid)
+{
+	if (lineEdit == ui.inductorText) isInductorValid = isValid;
+	else if (lineEdit == ui.capacitorText) isCapacitorValid = isValid;
+}
+
 void CircuitOptions::saveAllData()
 {
 	for (auto lineEdit : lineEdits) {
@@ -132,9 +170,15 @@ void CircuitOptions::saveAllData()
 		switch (key)
 		{
 		case CircuitData::Keys::RESISTOR:
-		case CircuitData::Keys::INDUCTOR:
-		case CircuitData::Keys::CAPACITOR:
 			circuitData->setComponentValue(key, val, keyToScale[key]);
+			break;
+		case CircuitData::Keys::INDUCTOR:
+			if (isInductorValid) circuitData->setComponentValue(key, val, keyToScale[key]);
+			else circuitData->setComponentValue(key, 0.0, keyToScale[key]);
+			break;
+		case CircuitData::Keys::CAPACITOR:
+			if (isCapacitorValid) circuitData->setComponentValue(key, val, keyToScale[key]);
+			else circuitData->setComponentValue(key, 0.0, keyToScale[key]);
 			break;
 		case CircuitData::Keys::VOLTAGE:
 			circuitData->setScaledVoltage(val, keyToScale[key], extractBaseUnit(ui.voltageScale->currentText()));

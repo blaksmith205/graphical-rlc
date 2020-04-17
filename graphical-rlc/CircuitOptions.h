@@ -17,16 +17,18 @@ private:
 	Circuit::Units extractBaseUnit(const QString& text);
 	std::u16string getBestModel();
 	inline Circuit::ComponetScale parseForScale(const QString& text);
+	void validateFieldData(const QObject* lineEdit, bool isValid);
 	// Save the data once the button is pressed 
 	void saveAllData();
 	void startSimulation();
 
 //Data
 private:
+	bool isInductorValid, isCapacitorValid;
 	// Simulation related
 	QFuture<void>* future;
 	QFutureWatcher<void>* watcher;
-	QString outputName;
+	std::u16string outputName;
 
 	std::shared_ptr<CircuitData> circuitData;
 	QList<QLineEdit*> lineEdits;
@@ -43,6 +45,7 @@ private:
 		{CircuitData::Keys::VOLTAGE, Circuit::ComponetScale::BASE}, {CircuitData::Keys::FREQUENCY, Circuit::ComponetScale::BASE},
 		{CircuitData::Keys::PHASE, Circuit::ComponetScale::BASE}, {CircuitData::Keys::OFFSET, Circuit::ComponetScale::BASE} };
 private slots:
+	void displayComponentFields();
 	void updateCircuitConfig(int index);
 	void updateCircuitScale(const QString& text);
 	void updateOutputComponent(const QString& text);

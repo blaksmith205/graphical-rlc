@@ -56,7 +56,7 @@ private:
 
 	// Data
 	Circuit::Configuration circuitConfig = Circuit::Configuration::SERIES;
-	Circuit::Components circuitComponents = Circuit::Components::R;
+	Circuit::Components circuitComponents = Circuit::Components::RLC;
 	Circuit::Components measureAcross = Circuit::Components::R;
 	Circuit::CircuitComponent resistor{ Circuit::Components::R, Circuit::Units::OHM };
 	Circuit::CircuitComponent inductor{ Circuit::Components::L, Circuit::Units::HENRY };
