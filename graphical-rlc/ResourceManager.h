@@ -11,6 +11,7 @@ public:
 	static const QByteArray getEnvPath();
 	static const QString getMatlabFullDLLPath();
 	static const QString getMatlabFullLibPath();
+	static void createOutputDir();
 private:
 	static const QDir* defaultMatlabRoot;
 	static QSettings* config;

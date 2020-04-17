@@ -80,3 +80,12 @@ const QString ResourceManager::getMatlabFullLibPath()
 {
 	return config->value(ini_MatlabRootKey).toString() + matlabWindowsLibSubDir;
 }
+
+void ResourceManager::createOutputDir()
+{
+	QDir outputDir("./generated");
+	if (!outputDir.exists())
+	{
+		outputDir.mkpath(".");
+	}
+}

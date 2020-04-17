@@ -11,6 +11,7 @@ int main(int argc, char* argv[])
 	{
 		// Set the program path to include the DLLs
 	}
+	ResourceManager::createOutputDir();
 	std::shared_ptr<CircuitData> data = std::make_shared<CircuitData>();
 	QApplication a(argc, argv);
 	MainWindow w(data);
