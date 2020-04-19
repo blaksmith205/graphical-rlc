@@ -6,6 +6,9 @@
 generated/
 *.ini
 
+# App script to release
+release.bat
+
 # User-specific files
 *.rsuser
 *.suo
