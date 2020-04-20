@@ -1,4 +1,4 @@
-function returnVals = calculate_transient(R, L, C, y_init, dy_init, finalVal, isSeries, isStep)
+function returnVals = calculate_transient(R, L, C, y_init, dy_init, finalVal, isSeries, isStep, outputName)
 syms C1 C2 sourceVal t s1 s2 a wd;
 %CALCULATE_TRANSIENT Calculates and displays the transient response
 
@@ -40,7 +40,15 @@ real_eq = matlabFunction(rhs);
 % Show the response over 5 seconds
 timeVals = linspace(0, 2e-3, 2000);
 yVals = arrayfun(real_eq, timeVals);
+figure('visible', 'off');
 plot(timeVals, yVals);
+xlabel('Time (secs)');
+if (isStep == true && finalVal ~= 0) || (isStep == false && finalVal == 0)
+    ylabel('Volts');
+elseif (isStep == true && finalVal == 0) || (isStep == false && finalVal ~= 0)
+    ylabel('Amps');
+end
+print(outputName, '-dpng');
 
 % Setup the return values
 fields = ["s1" "s2" "wd" "response" "rhs"];
