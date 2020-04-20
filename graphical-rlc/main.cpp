@@ -4,12 +4,16 @@
 #include "ResourceManager.h"
 #include <QtWidgets/QApplication>
 
-// TODO: Add newest matlab/extern libs to program path
 int main(int argc, char* argv[])
 {
 	if (ResourceManager::isMatlabInstalled())
 	{
 		// Set the program path to include the DLLs
+		qputenv("PATH",ResourceManager::getEnvPath());
+	}
+	else 
+	{
+		// TODO: Prompt the user for the matlab installation
 	}
 	ResourceManager::createOutputDir();
 	std::shared_ptr<CircuitData> data = std::make_shared<CircuitData>();

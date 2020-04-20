@@ -4,7 +4,6 @@
 // Variable Init
 const QString ResourceManager::ini_MatlabRootKey = QStringLiteral("Matlab/rootdir");
 const QString ResourceManager::matlabWindowsDLLSubDir = QStringLiteral("/extern/bin/win64");
-const QString ResourceManager::matlabWindowsLibSubDir = QStringLiteral("/extern/lib/win64/microsoft");
 const QDir* ResourceManager::defaultMatlabRoot = new QDir("C:/Program Files/MATLAB");
 QSettings* ResourceManager::config = new QSettings(QDir::currentPath() + "/GraphicalRLC.ini", QSettings::Format::IniFormat);
 
@@ -74,11 +73,6 @@ const QByteArray ResourceManager::getEnvPath()
 const QString ResourceManager::getMatlabFullDLLPath()
 {
 	return config->value(ini_MatlabRootKey).toString() + matlabWindowsDLLSubDir;
-}
-
-const QString ResourceManager::getMatlabFullLibPath()
-{
-	return config->value(ini_MatlabRootKey).toString() + matlabWindowsLibSubDir;
 }
 
 void ResourceManager::createOutputDir()
