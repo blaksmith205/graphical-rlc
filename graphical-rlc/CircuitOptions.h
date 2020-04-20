@@ -24,6 +24,7 @@ private:
 	//Data
 private:
 	bool isInductorValid, isCapacitorValid;
+	bool isTransient = true; // TODO: check if transient should be calculated
 	// Simulation related
 	QFuture<void>* future;
 	QFutureWatcher<void>* watcher;
@@ -57,4 +58,5 @@ private slots:
 signals:
 	void loadingChanged(int visible);
 	void simulationOutputChanged(const QString& fileName);
+	void transientClicked();
 };

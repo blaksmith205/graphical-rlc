@@ -16,7 +16,7 @@ public:
 		OFFSET
 	};
 	// Keep source public because retrieval will probably not be that common
-	Circuit::InputSignal voltageSource = Circuit::InputSignal::SINUSOIDAL;
+	Circuit::InputSignal voltageSource = Circuit::InputSignal::DC;
 
 	// Call this to emit a voltageChanged signal
 	void setVoltageWaveform(Circuit::InputSignal signalWaveform);

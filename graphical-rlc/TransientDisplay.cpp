@@ -1,13 +1,19 @@
 #include "stdafx.h"
+#include <complex>
+#include <QtConcurrent>
 #include "TransientDisplay.h"
 #include "ResourceManager.h"
+#include "MatlabManager.h"
 
 TransientDisplay::TransientDisplay(std::shared_ptr<CircuitData> data, QWidget* parent)
 	: QWidget(parent), circuitData(data)
 {
 	ui.setupUi(this);
+	future = new QFuture<void>();
+	watcher = new QFutureWatcher<void>();
 	connect(ui.circuitSelection, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(updateComponents(const QString&)));
 	connect(circuitData.get(), SIGNAL(configChanged()), this, SLOT(updateCircuitPreview()));
+	connect(watcher, SIGNAL(finished()), this, SLOT(calcComplete()));
 }
 
 void TransientDisplay::showPreview(const QString& resource)
@@ -15,6 +21,31 @@ void TransientDisplay::showPreview(const QString& resource)
 	circuitImage = ResourceManager::loadImage(this, resource);
 	circuitImage = circuitImage.scaled(ui.circuitPreview->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 	ui.circuitPreview->setPixmap(QPixmap::fromImage(circuitImage));
+}
+
+void TransientDisplay::calcComplete()
+{
+	showOutput(outputName);
+}
+
+void TransientDisplay::calcTransientAsync()
+{
+	emit loadingChanged(1);
+	*future = QtConcurrent::run(this, &TransientDisplay::calcTransient);
+	watcher->setFuture(*future);
+}
+
+void TransientDisplay::calcTransient()
+{
+	// Create a matlab manager
+	MatlabManager manager;
+	outputName = "test";
+	// TODO: make sure the data is not empty
+	matlab::data::StructArray results = manager.calcTransient(circuitData.get(), u"generated/test");
+
+	//std::complex<double> s1 = results[matlab::data::MATLABFieldIdentifier("s1")]
+	//std::string complexStr = s1.real << " " << s1.imag;
+	//ui.s1Output->setText(QString::fromStdString(complexStr));
 }
 
 void TransientDisplay::updateComponents(const QString& text)
@@ -60,3 +91,5 @@ void TransientDisplay::showOutput(const QString& simulationOutput)
 	ui.simulationOutput->setPixmap(QPixmap::fromImage(simulationImage));
 	emit loadingChanged(0);
 }
+
+

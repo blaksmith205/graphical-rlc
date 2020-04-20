@@ -98,11 +98,12 @@
   <ItemGroup>
     <ClCompile Include="CircuitData.cpp" />
     <ClCompile Include="CircuitOptions.cpp" />
+    <ClCompile Include="MatlabManager.cpp" />
     <ClCompile Include="TransientDisplay.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MatlabManager.cpp" />
+    <ClCompile Include="SimulinkManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -111,6 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MainWindow.h" />
+    <ClInclude Include="MatlabManager.h" />
     <ClInclude Include="UnitConverter.h" />
     <QtMoc Include="CircuitOptions.h" />
     <QtMoc Include="CircuitData.h" />

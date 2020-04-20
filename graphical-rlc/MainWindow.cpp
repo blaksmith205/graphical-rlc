@@ -12,6 +12,7 @@ MainWindow::MainWindow(std::shared_ptr<CircuitData> data, QWidget* parent)
 	connect(circuitsOptions, SIGNAL(loadingChanged(int)), this, SLOT(updateProgressBar(int)));
 	connect(outputImages, SIGNAL(loadingChanged(int)), this, SLOT(updateProgressBar(int)));
 	connect(circuitsOptions, SIGNAL(simulationOutputChanged(const QString&)), outputImages, SLOT(showOutput(const QString&)));
+	connect(circuitsOptions, SIGNAL(transientClicked()), outputImages, SLOT(calcTransientAsync()));
 }
 
 // 0 means not visible

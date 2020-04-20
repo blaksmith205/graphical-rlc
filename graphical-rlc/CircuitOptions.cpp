@@ -203,7 +203,7 @@ void CircuitOptions::saveAllData()
 void CircuitOptions::startSimulation()
 {
 	using namespace matlab::engine;
-	// Create a matlab manager
+	// Create a simulink manager
 	SimulinkManager manager;
 	manager.setVariables(circuitData);
 
@@ -252,9 +252,16 @@ void CircuitOptions::simulationComplete()
 
 void CircuitOptions::startSimulationAsync()
 {
-	emit loadingChanged(1);
-	*future = QtConcurrent::run(this, &CircuitOptions::startSimulation);
-	watcher->setFuture(*future);
+	if (isTransient)
+	{
+		emit transientClicked();
+	}
+	else
+	{
+		emit loadingChanged(1);
+		*future = QtConcurrent::run(this, &CircuitOptions::startSimulation);
+		watcher->setFuture(*future);
+	}
 }
 
 void CircuitOptions::validateTextValue(const QString& text)

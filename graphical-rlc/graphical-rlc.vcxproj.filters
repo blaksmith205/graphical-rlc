@@ -7,9 +7,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MatlabManager.cpp">
-      <Filter>Source Files\matlab</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
@@ -27,6 +24,12 @@
     </ClCompile>
     <ClCompile Include="TransientDisplay.cpp">
       <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="SimulinkManager.cpp">
+      <Filter>Source Files\matlab</Filter>
+    </ClCompile>
+    <ClCompile Include="MatlabManager.cpp">
+      <Filter>Source Files\matlab</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +77,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SimulinkManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MatlabManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
