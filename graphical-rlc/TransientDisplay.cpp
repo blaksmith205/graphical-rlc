@@ -39,6 +39,7 @@ void TransientDisplay::calcTransient()
 {
 	// Create a matlab manager
 	MatlabManager manager;
+	// TODO: obtain a valid name for the output response
 	outputName = "test";
 	// TODO: make sure the data is not empty
 	matlab::data::StructArray results = manager.calcTransient(circuitData.get(), u"generated/test");

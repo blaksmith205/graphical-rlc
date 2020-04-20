@@ -8,6 +8,10 @@ CircuitOptions::CircuitOptions(std::shared_ptr<CircuitData> data, QWidget* paren
 	: QWidget(parent), circuitData(data)
 {
 	ui.setupUi(this);
+	// TODO: figure out how to use measure across for transient/stable
+	// Temporarily disable measureAcross
+	ui.measureAcrossLabel->setVisible(false);
+	ui.measureAcrossSelection->setVisible(false);
 	future = new QFuture<void>();
 	watcher = new QFutureWatcher<void>();
 	buildMap();
@@ -27,6 +31,8 @@ CircuitOptions::CircuitOptions(std::shared_ptr<CircuitData> data, QWidget* paren
 		}
 		else
 		{
+			if (lineEdit == ui.initialConditionText || lineEdit == ui.initialConditionPrimeText)
+				top = 100e+7;
 			dblValidator->setBottom(-(top - 1));
 			lineEdit->setValidator(dblValidator);
 			connect(lineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(validateTextValue(const QString&)));
@@ -114,6 +120,8 @@ void CircuitOptions::buildMap()
 	qobjectToDataMap.insert({ ui.voltageScale, CircuitData::Keys::VOLTAGE });
 	qobjectToDataMap.insert({ ui.frequencyScale, CircuitData::Keys::FREQUENCY });
 	qobjectToDataMap.insert({ ui.phaseUnits, CircuitData::Keys::PHASE });
+	qobjectToDataMap.insert({ ui.initialConditionText, CircuitData::Keys::INITIAL_CONDITION });
+	qobjectToDataMap.insert({ ui.initialConditionPrimeText, CircuitData::Keys::INITIAL_CONDITION_PRIME });
 }
 
 Circuit::Units CircuitOptions::extractBaseUnit(const QString& text)
@@ -195,6 +203,10 @@ void CircuitOptions::saveAllData()
 			break;
 		case CircuitData::Keys::OFFSET:
 			circuitData->setScaledOffset(val, keyToScale[key]);
+			break;
+		case CircuitData::Keys::INITIAL_CONDITION:
+		case CircuitData::Keys::INITIAL_CONDITION_PRIME:
+			circuitData->setInitialCondition(key, val);
 			break;
 		}
 	}

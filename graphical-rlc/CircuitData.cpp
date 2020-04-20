@@ -76,6 +76,23 @@ void CircuitData::setComponentValue(Keys key, double val, Circuit::ComponetScale
 	}
 }
 
+void CircuitData::setInitialCondition(Keys key, double val)
+{
+	double condition = *(conditionMap[key]);
+	if (key == Keys::INITIAL_CONDITION && val != condition)
+	{
+		initialCondition = val;
+		emit componentsChanged();
+		emit componentValueChanged(Keys::INITIAL_CONDITION);
+	}
+	else if (key == Keys::INITIAL_CONDITION_PRIME && val != condition)
+	{
+		initialConditionPrime = val;
+		emit componentsChanged();
+		emit componentValueChanged(Keys::INITIAL_CONDITION_PRIME);
+	}
+}
+
 void CircuitData::changeVoltage(double val, Circuit::ComponetScale scale, Circuit::Units unit)
 {
 	// If Vpp is selected as the unit, the voltage is the amplitude or half

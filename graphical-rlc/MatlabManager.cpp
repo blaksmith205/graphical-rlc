@@ -19,13 +19,14 @@ matlab::data::StructArray MatlabManager::calcTransient(CircuitData* data, const 
 
 	auto dataVals = data->componentValues();
 	auto config = data->getConfig();
+	auto conditions = data->initialConditions();
 	// Setup the args
 	std::vector<matlab::data::Array> args = {
 		factory.createScalar<double>(dataVals[0].value), // R
 		factory.createScalar<double>(dataVals[1].value), // L
 		factory.createScalar<double>(dataVals[2].value), // C
-		factory.createScalar<double>(12), // y_init // TODO: add y_init
-		factory.createScalar<double>(-450e+3), // dy_init // TODO: add dy_init
+		factory.createScalar<double>(conditions[0]), // y_init
+		factory.createScalar<double>(conditions[1]), // dy_init
 		factory.createScalar<double>(0.0), // finalVal // TODO: add finalVal
 		factory.createScalar<bool>(config == Circuit::Configuration::SERIES), // isSeries = false if config is parallel
 		factory.createScalar<bool>(false), // isStep is false when response is natural // TODO: add type of response
