@@ -1,8 +1,8 @@
 #include "stdafx.h"
-#include "ImageDisplay.h"
+#include "TransientDisplay.h"
 #include "ResourceManager.h"
 
-ImageDisplay::ImageDisplay(std::shared_ptr<CircuitData> data, QWidget* parent)
+TransientDisplay::TransientDisplay(std::shared_ptr<CircuitData> data, QWidget* parent)
 	: QWidget(parent), circuitData(data)
 {
 	ui.setupUi(this);
@@ -10,14 +10,14 @@ ImageDisplay::ImageDisplay(std::shared_ptr<CircuitData> data, QWidget* parent)
 	connect(circuitData.get(), SIGNAL(configChanged()), this, SLOT(updateCircuitPreview()));
 }
 
-void ImageDisplay::showPreview(const QString& resource)
+void TransientDisplay::showPreview(const QString& resource)
 {
 	circuitImage = ResourceManager::loadImage(this, resource);
 	circuitImage = circuitImage.scaled(ui.circuitPreview->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 	ui.circuitPreview->setPixmap(QPixmap::fromImage(circuitImage));
 }
 
-void ImageDisplay::updateComponents(const QString& text)
+void TransientDisplay::updateComponents(const QString& text)
 {
 	Circuit::Components selectedComponents = Circuit::componentMap[text];
 	circuitData->setComponent(CircuitData::Keys::CIRCUIT_COMPONENTS, selectedComponents);
@@ -48,12 +48,12 @@ void ImageDisplay::updateComponents(const QString& text)
 	showPreview(resource);
 }
 
-void ImageDisplay::updateCircuitPreview()
+void TransientDisplay::updateCircuitPreview()
 {
 	updateComponents(ui.circuitSelection->currentText());
 }
 
-void ImageDisplay::showOutput(const QString& simulationOutput)
+void TransientDisplay::showOutput(const QString& simulationOutput)
 {
 	simulationImage = ResourceManager::loadImage(this, "generated/" + simulationOutput + ".png");
 	simulationImage = simulationImage.scaled(ui.simulationOutput->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);

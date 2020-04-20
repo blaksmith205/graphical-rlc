@@ -1,14 +1,14 @@
 #pragma once
 
 #include <QWidget>
-#include "ui_ImageDisplay.h"
+#include "ui_TransientDisplay.h"
 #include "CircuitData.h"
 
-class ImageDisplay : public QWidget {
+class TransientDisplay : public QWidget {
 	Q_OBJECT
 
 public:
-	ImageDisplay(std::shared_ptr<CircuitData> data, QWidget* parent = Q_NULLPTR);
+	TransientDisplay(std::shared_ptr<CircuitData> data, QWidget* parent = Q_NULLPTR);
 
 private:
 	void showPreview(const QString& resource);
@@ -16,7 +16,7 @@ private:
 	QImage circuitImage;
 	QImage simulationImage;
 	std::shared_ptr<CircuitData> circuitData;
-	Ui::ImageDisplay ui;
+	Ui::TransientDisplay ui;
 private slots:
 	void updateComponents(const QString& text);
 	void updateCircuitPreview();

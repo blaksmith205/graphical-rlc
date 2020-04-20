@@ -16,9 +16,6 @@
     <ClCompile Include="CircuitOptions.cpp">
       <Filter>Source Files\ui</Filter>
     </ClCompile>
-    <ClCompile Include="ImageDisplay.cpp">
-      <Filter>Source Files\ui</Filter>
-    </ClCompile>
     <ClCompile Include="CircuitData.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
@@ -26,6 +23,9 @@
       <Filter>Source Files\util</Filter>
     </ClCompile>
     <ClCompile Include="MainWindow.cpp">
+      <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="TransientDisplay.cpp">
       <Filter>Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>
@@ -87,7 +87,7 @@
     <QtUic Include="CircuitOptions.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="ImageDisplay.ui">
+    <QtUic Include="TransientDisplay.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
@@ -95,13 +95,13 @@
     <QtMoc Include="CircuitOptions.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="ImageDisplay.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="CircuitData.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="MainWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="TransientDisplay.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

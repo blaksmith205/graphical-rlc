@@ -4,7 +4,7 @@
 #include "ui_MainWindow.h"
 #include "CircuitData.h"
 #include "CircuitOptions.h"
-#include "ImageDisplay.h"
+#include "TransientDisplay.h"
 
 class MainWindow : public QMainWindow {
 	Q_OBJECT
@@ -14,7 +14,7 @@ public:
 private:
 	// Custom left and right widgets
 	CircuitOptions* circuitsOptions;
-	ImageDisplay* outputImages;
+	TransientDisplay* outputImages;
 
 	Ui::MainWindowClass ui;
 

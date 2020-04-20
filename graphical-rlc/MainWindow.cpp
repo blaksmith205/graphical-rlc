@@ -2,7 +2,7 @@
 #include "MainWindow.h"
 
 MainWindow::MainWindow(std::shared_ptr<CircuitData> data, QWidget* parent)
-	: QMainWindow(parent), circuitsOptions(new CircuitOptions(data, ui.mainLeft)), outputImages(new ImageDisplay(data, ui.mainRight))
+	: QMainWindow(parent), circuitsOptions(new CircuitOptions(data, ui.mainLeft)), outputImages(new TransientDisplay(data, ui.mainRight))
 {
 	ui.setupUi(this);
 	ui.progressBar->setVisible(false);

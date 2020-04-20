@@ -98,7 +98,7 @@
   <ItemGroup>
     <ClCompile Include="CircuitData.cpp" />
     <ClCompile Include="CircuitOptions.cpp" />
-    <ClCompile Include="ImageDisplay.cpp" />
+    <ClCompile Include="TransientDisplay.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="main.cpp" />
@@ -115,14 +115,14 @@
     <QtMoc Include="CircuitOptions.h" />
     <QtMoc Include="CircuitData.h" />
     <ClInclude Include="CircuitInfo.h" />
-    <QtMoc Include="ImageDisplay.h" />
+    <QtMoc Include="TransientDisplay.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="MatlabManager.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="CircuitOptions.ui" />
-    <QtUic Include="ImageDisplay.ui" />
+    <QtUic Include="TransientDisplay.ui" />
     <QtUic Include="MainWindow.ui" />
   </ItemGroup>
   <ItemGroup>
