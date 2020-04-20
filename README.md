@@ -4,14 +4,6 @@ This project utilizes Qt 5.14.2 and a connection to the Matlab engine for simula
 
 End users should only require Matlab with Simulink installed. Users require Matlab version R2017b or higher.
 This project is licensed under GPLv3. License can be found [here](./license.txt).
-## User setup
-Currently, the path is not automatically setup. Hopefully in the future this can be done automatically before the program starts. For the time being, users will need to follow these steps to get the program working on their computer.
-1. Download the latest compiled release
-2. Extract the zip file onto the computer in a desired location
-3. Open up your newest installed version of Matlab and enter `matlabroot` into the command window. The value returned from this Matlab command will be referenced as `<matlabroot>`
-4. Add `<matlabroot>\extern\bin\win64` to the 'Path' environment variable. See [example repo](https://github.com/blaksmith205/cpp-with-matlab) on more information to open and edit environment variables on Windows 10
-	* Example path to add: `C:\Program Files\R2020a\extern\bin\win64`
-5. Click ok for all the opened windows. The .exe file inside the extracted zip file will start the program. All generated images will be available inside the generated sub-folder in a larger size, for better viewing
 ## Requirements for Development
 * Matlab R2017b and above. Older versions might work, but no promises
 * Appropriate Simulink version. Used Simulink 10.1 with Matlab R2020a
