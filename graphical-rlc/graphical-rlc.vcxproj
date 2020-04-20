@@ -96,22 +96,37 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CircuitData.cpp" />
+    <ClCompile Include="CircuitOptions.cpp" />
+    <ClCompile Include="ImageDisplay.cpp" />
+    <ClCompile Include="MainWindow.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="mainwidget.cpp" />
+    <ClCompile Include="MatlabManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="UnitConverter.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="mainwidget.h" />
+    <QtMoc Include="MainWindow.h" />
+    <ClInclude Include="UnitConverter.h" />
+    <QtMoc Include="CircuitOptions.h" />
+    <QtMoc Include="CircuitData.h" />
+    <ClInclude Include="CircuitInfo.h" />
+    <QtMoc Include="ImageDisplay.h" />
+    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="MatlabManager.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="mainwidget.ui" />
+    <QtUic Include="CircuitOptions.ui" />
+    <QtUic Include="ImageDisplay.ui" />
+    <QtUic Include="MainWindow.ui" />
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="mainwidget.qrc" />
+    <QtRcc Include="circuitpreviews.qrc" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="graphical-rlc.rc" />

@@ -2,12 +2,12 @@
 This repo is mostly for a Circuits 2 project. It creates a graphical UI for users to easily simulate RLC designs.
 This project utilizes Qt 5.14.2 and a connection to the Matlab engine for simulations.  
 
-End users should only require Matlab with Simulink installed. Models should be backwards compatible.
+End users should only require Matlab with Simulink installed. Users require Matlab version R2017b or higher.
 This project is licensed under GPLv3. License can be found [here](./license.txt).
 ## Requirements for Development
-* Matlab R2019 and above. Older versions might work, but no promises
+* Matlab R2017b and above. Older versions might work, but no promises
 * Appropriate Simulink version. Used Simulink 10.1 with Matlab R2020a
-* Qt 5.14.2. See the [Qt setup instructions]
+* Qt 5.14.2. See the [Qt setup instructions](#qt)
 * Visual Studio 2017 or higher. Visual Studio 2019 was used for this project
 * Windows 10 64-bit. Used Version 10.0.18363 Build 18363. Newer/older Windows 10 versions and builds should work fine.
 ## Setting Up
