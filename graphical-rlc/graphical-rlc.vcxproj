@@ -117,7 +117,7 @@
     <ClInclude Include="CircuitInfo.h" />
     <QtMoc Include="TransientDisplay.h" />
     <ClInclude Include="ResourceManager.h" />
-    <ClInclude Include="MatlabManager.h" />
+    <ClInclude Include="SimulinkManager.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>

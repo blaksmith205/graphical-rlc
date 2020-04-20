@@ -4,9 +4,9 @@
 #include "MatlabDataArray.hpp"
 #include "CircuitData.h"
 
-class MatlabManager {
+class SimulinkManager {
 public:
-	MatlabManager() : engine(matlab::engine::connectMATLAB()) {};
+	SimulinkManager() : engine(matlab::engine::connectMATLAB()) {};
 	void loadModel(const std::u16string& modelName);
 	void loadModelAndSimulate(const std::u16string& modelName);
 	void saveResults(const std::u16string& outputName);

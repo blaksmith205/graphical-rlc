@@ -2,7 +2,7 @@
 #include <QtConcurrent>
 #include "CircuitOptions.h"
 #include "UnitConverter.h"
-#include "MatlabManager.h"
+#include "SimulinkManager.h"
 
 CircuitOptions::CircuitOptions(std::shared_ptr<CircuitData> data, QWidget* parent)
 	: QWidget(parent), circuitData(data)
@@ -204,7 +204,7 @@ void CircuitOptions::startSimulation()
 {
 	using namespace matlab::engine;
 	// Create a matlab manager
-	MatlabManager manager;
+	SimulinkManager manager;
 	manager.setVariables(circuitData);
 
 	// Setup default simulation parameters

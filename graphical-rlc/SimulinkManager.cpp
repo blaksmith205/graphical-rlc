@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "MatlabManager.h"
+#include "SimulinkManager.h"
 #include "MatlabEngine.hpp"
 #include "MatlabDataArray.hpp"
 #include <Windows.h>
@@ -7,7 +7,7 @@ using namespace matlab::engine;
 
 static std::map<int, std::string> variableNames = { {0, "R"}, {1, "L"}, {2, "C"}, {3, "A"}, {4, "F"}, {5, "phase"}, {6, "offset"} };
 
-void MatlabManager::loadModel(const std::u16string& modelName)
+void SimulinkManager::loadModel(const std::u16string& modelName)
 {
 	// Set the model name in matlab's workspace
 	matlab::data::ArrayFactory factory;
@@ -18,13 +18,13 @@ void MatlabManager::loadModel(const std::u16string& modelName)
 	engine->feval("load_system", loadArgs);
 }
 
-void MatlabManager::loadModelAndSimulate(const std::u16string& modelName)
+void SimulinkManager::loadModelAndSimulate(const std::u16string& modelName)
 {
 	loadModel(modelName);
 	startSimulation();
 }
 
-void MatlabManager::saveResults(const std::u16string& outputName)
+void SimulinkManager::saveResults(const std::u16string& outputName)
 {
 	// Get simulation data and create a graph
 	engine->eval(u"y = simOut.get('yOut');");
@@ -34,7 +34,7 @@ void MatlabManager::saveResults(const std::u16string& outputName)
 	engine->eval(printCall);
 }
 
-void MatlabManager::setVariables(const std::shared_ptr<CircuitData>& data)
+void SimulinkManager::setVariables(const std::shared_ptr<CircuitData>& data)
 {
 	auto componentValues = data->componentValues();
 	matlab::data::ArrayFactory factory;
@@ -45,7 +45,7 @@ void MatlabManager::setVariables(const std::shared_ptr<CircuitData>& data)
 	}
 }
 
-void MatlabManager::setSimulationParameters()
+void SimulinkManager::setSimulationParameters()
 {
 	// Create MATLAB data array factory
 	matlab::data::ArrayFactory factory;
@@ -65,13 +65,13 @@ void MatlabManager::setSimulationParameters()
 	engine->setVariable(u"parameterStruct", parameterStruct);
 }
 
-void MatlabManager::setSimulationParameters(const matlab::data::StructArray& parameterStruct)
+void SimulinkManager::setSimulationParameters(const matlab::data::StructArray& parameterStruct)
 {
 	// Put simulation parameter struct in MATLAB
 	engine->setVariable(u"parameterStruct", parameterStruct);
 }
 
-void MatlabManager::startSimulation()
+void SimulinkManager::startSimulation()
 {
 	engine->eval(u"simOut = sim(modelName, parameterStruct);");
 }
