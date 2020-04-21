@@ -11,6 +11,16 @@ void CircuitData::setVoltageWaveform(Circuit::InputSignal signalWaveform)
 	}
 }
 
+void CircuitData::setResponse(Circuit::Response response)
+{
+	if (response != this->response)
+	{
+		this->response = response;
+		emit responseChanged();
+		emit dataChanged(Keys::RESPONSE);
+	}
+}
+
 void CircuitData::setCircuitConfig(Circuit::Configuration config)
 {
 	if (circuitConfig == config)
@@ -26,13 +36,13 @@ void CircuitData::setComponent(Keys key, Circuit::Components val)
 	{
 		circuitComponents = val;
 		emit componentsChanged();
-		emit componentValueChanged(Keys::CIRCUIT_COMPONENTS);
+		emit dataChanged(Keys::CIRCUIT_COMPONENTS);
 	}
 	else if (key == Keys::MEASURE_ACROSS && val != cc)
 	{
 		measureAcross = val;
 		emit componentsChanged();
-		emit componentValueChanged(Keys::MEASURE_ACROSS);
+		emit dataChanged(Keys::MEASURE_ACROSS);
 	}
 }
 
@@ -46,7 +56,7 @@ void CircuitData::setComponentValue(Keys key, double val, Circuit::ComponetScale
 		{
 			resistor.value = scaledVal;
 			emit resistorChanged();
-			emit componentValueChanged(Keys::RESISTOR);
+			emit dataChanged(Keys::RESISTOR);
 		}
 		break;
 	case Keys::INDUCTOR:
@@ -54,7 +64,7 @@ void CircuitData::setComponentValue(Keys key, double val, Circuit::ComponetScale
 		{
 			inductor.value = scaledVal;
 			emit inductorChanged();
-			emit componentValueChanged(Keys::INDUCTOR);
+			emit dataChanged(Keys::INDUCTOR);
 		}
 		break;
 	case Keys::CAPACITOR:
@@ -62,7 +72,7 @@ void CircuitData::setComponentValue(Keys key, double val, Circuit::ComponetScale
 		{
 			capacitor.value = scaledVal;
 			emit capacitorChanged();
-			emit componentValueChanged(Keys::CAPACITOR);
+			emit dataChanged(Keys::CAPACITOR);
 		}
 		break;
 	case Keys::OFFSET:
@@ -70,7 +80,7 @@ void CircuitData::setComponentValue(Keys key, double val, Circuit::ComponetScale
 		{
 			offset.value = scaledVal;
 			emit offsetChanged();
-			emit componentValueChanged(Keys::OFFSET);
+			emit dataChanged(Keys::OFFSET);
 		}
 		break;
 	}
@@ -83,13 +93,13 @@ void CircuitData::setInitialCondition(Keys key, double val)
 	{
 		initialCondition = val;
 		emit componentsChanged();
-		emit componentValueChanged(Keys::INITIAL_CONDITION);
+		emit dataChanged(Keys::INITIAL_CONDITION);
 	}
 	else if (key == Keys::INITIAL_CONDITION_PRIME && val != condition)
 	{
 		initialConditionPrime = val;
 		emit componentsChanged();
-		emit componentValueChanged(Keys::INITIAL_CONDITION_PRIME);
+		emit dataChanged(Keys::INITIAL_CONDITION_PRIME);
 	}
 }
 
@@ -102,7 +112,7 @@ void CircuitData::changeVoltage(double val, Circuit::ComponetScale scale, Circui
 	{
 		voltage.value = scaledVal;
 		emit voltageChanged();
-		emit componentValueChanged(Keys::VOLTAGE);
+		emit dataChanged(Keys::VOLTAGE);
 	}
 }
 
@@ -120,7 +130,7 @@ void CircuitData::changeFrequency(double val, Circuit::ComponetScale scale, Circ
 		frequency.value = scaledVal;
 		frequency.unit = unit;
 		emit frequencyChanged();
-		emit componentValueChanged(Keys::FREQUENCY);
+		emit dataChanged(Keys::FREQUENCY);
 	}
 }
 
@@ -135,7 +145,7 @@ void CircuitData::changePhase(double val, Circuit::Units unit)
 		phase.value = val;
 		phase.unit = unit;
 		emit phaseChanged();
-		emit componentValueChanged(Keys::PHASE);
+		emit dataChanged(Keys::PHASE);
 	}
 }
 

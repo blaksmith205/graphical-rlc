@@ -11,7 +11,7 @@ TransientDisplay::TransientDisplay(std::shared_ptr<CircuitData> data, QWidget* p
 	ui.setupUi(this);
 	future = new QFuture<void>();
 	watcher = new QFutureWatcher<void>();
-	connect(ui.circuitSelection, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(updateComponents(const QString&)));
+	connect(ui.responseSelection, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(updateResponse(const QString&)));
 	connect(circuitData.get(), SIGNAL(configChanged()), this, SLOT(updateCircuitPreview()));
 	connect(watcher, SIGNAL(finished()), this, SLOT(calcComplete()));
 }
@@ -80,9 +80,32 @@ void TransientDisplay::updateComponents(const QString& text)
 	showPreview(resource);
 }
 
+void TransientDisplay::updateResponse(const QString& text)
+{
+	Circuit::Response resp = text == "Natural" ? Circuit::Response::NATURAL : Circuit::Response::STEP;
+	circuitData->setResponse(resp);
+	QString resource(":/Previews/Resources/");
+	switch (circuitData->response)
+	{
+	case Circuit::Response::NATURAL:
+		if (circuitData->getConfig() == Circuit::Configuration::PARALLEL)
+			resource.append("DC_parallel_natural_response.png");
+		else if (circuitData->getConfig() == Circuit::Configuration::SERIES)
+			resource.append("DC_series_natural_response.png");
+		break;
+	case Circuit::Response::STEP:
+		if (circuitData->getConfig() == Circuit::Configuration::PARALLEL)
+			resource.append("DC_parallel_step_response.png");
+		else if (circuitData->getConfig() == Circuit::Configuration::SERIES)
+			resource.append("DC_series_step_response.png");
+		break;
+	}
+	showPreview(resource);
+}
+
 void TransientDisplay::updateCircuitPreview()
 {
-	updateComponents(ui.circuitSelection->currentText());
+	updateResponse(ui.responseSelection->currentText());
 }
 
 void TransientDisplay::showOutput(const QString& simulationOutput)

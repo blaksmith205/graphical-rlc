@@ -27,6 +27,7 @@ private slots:
 	void calcTransientAsync();
 	void calcTransient();
 	void updateComponents(const QString& text);
+	void updateResponse(const QString& text);
 	void updateCircuitPreview();
 	void showOutput(const QString& simulationOutput);
 signals:

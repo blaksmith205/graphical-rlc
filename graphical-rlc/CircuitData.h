@@ -15,19 +15,23 @@ public:
 		PHASE,
 		OFFSET, 
 		INITIAL_CONDITION,
-		INITIAL_CONDITION_PRIME
+		INITIAL_CONDITION_PRIME, 
+		RESPONSE
 	};
-	// Keep source public because retrieval will probably not be that common
+	// Keep source and response public because retrieval will probably not be that common
 	Circuit::InputSignal voltageSource = Circuit::InputSignal::DC;
+	Circuit::Response response = Circuit::Response::NATURAL;
 
 	// Call this to emit a voltageChanged signal
 	void setVoltageWaveform(Circuit::InputSignal signalWaveform);
-
+	// Call this to emit a responseChanged signal
+	void setResponse(Circuit::Response response);
 	// Functions to properly set data and emit changes
 	void setCircuitConfig(Circuit::Configuration config);
 	void setComponent(Keys key, Circuit::Components val);
 	void setComponentValue(Keys key, double val, Circuit::ComponetScale scale);
 	void setInitialCondition(Keys key, double val);
+	
 
 	// Convience functions to set values without the keys
 	inline void setScaledResistor(double val, Circuit::ComponetScale scale) { setComponentValue(Keys::RESISTOR, val, scale); };
@@ -61,7 +65,7 @@ private:
 	void changePhase(double val, Circuit::Units unit);
 
 	// Data
-	Circuit::Configuration circuitConfig = Circuit::Configuration::SERIES;
+	Circuit::Configuration circuitConfig = Circuit::Configuration::PARALLEL;
 	Circuit::Components circuitComponents = Circuit::Components::RLC;
 	Circuit::Components measureAcross = Circuit::Components::R;
 	Circuit::CircuitComponent resistor{ Circuit::Components::R, Circuit::Units::OHM };
@@ -82,8 +86,8 @@ signals:
 	void componentsChanged();
 	void measuredOutputChanged();
 
-	// General component value changed signal
-	void componentValueChanged(const Keys&);
+	// General data changed signal
+	void dataChanged(const Keys&);
 
 	// Specific component value changed signal
 	void resistorChanged();
@@ -99,5 +103,8 @@ signals:
 	// Initial Conditions
 	void initialConditionChanged();
 	void initialConditionPrimeChanged();
+
+	// Response
+	void responseChanged();
 };
 Q_DECLARE_METATYPE(CircuitData::Keys);
