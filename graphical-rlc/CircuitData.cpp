@@ -101,6 +101,12 @@ void CircuitData::setInitialCondition(Keys key, double val)
 		emit componentsChanged();
 		emit dataChanged(Keys::INITIAL_CONDITION_PRIME);
 	}
+	else if (key == Keys::FINAL_VALUE && val != condition)
+	{
+		finalValue = val;
+		emit finalValueChanged();
+		emit dataChanged(Keys::FINAL_VALUE);
+	}
 }
 
 void CircuitData::changeVoltage(double val, Circuit::ComponetScale scale, Circuit::Units unit)

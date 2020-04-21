@@ -27,9 +27,9 @@ matlab::data::StructArray MatlabManager::calcTransient(CircuitData* data, const 
 		factory.createScalar<double>(dataVals[2].value), // C
 		factory.createScalar<double>(conditions[0]), // y_init
 		factory.createScalar<double>(conditions[1]), // dy_init
-		factory.createScalar<double>(0.0), // finalVal // TODO: add finalVal
+		factory.createScalar<double>(conditions[2]), // finalVal
 		factory.createScalar<bool>(config == Circuit::Configuration::SERIES), // isSeries = false if config is parallel
-		factory.createScalar<bool>(false), // isStep is false when response is natural // TODO: add type of response
+		factory.createScalar<bool>(data->response == Circuit::Response::STEP), // isStep is false when response is natural
 		factory.createCharArray(outputName)
 	};
 	

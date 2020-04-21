@@ -17,9 +17,9 @@ CircuitOptions::CircuitOptions(std::shared_ptr<CircuitData> data, QWidget* paren
 	buildMap();
 	// Limit TextFields to only accept numbers
 	lineEdits = this->findChildren<QLineEdit*>();
-	double top = 10000; // Top - 1 is the number of characters limit
 	for (auto lineEdit : lineEdits)
 	{
+		double top = 10000; // Top - 1 is the number of characters limit
 		QDoubleValidator* dblValidator = new QDoubleValidator(0, top - 1, 8, lineEdit);
 		dblValidator->setNotation(QDoubleValidator::StandardNotation);
 		dblValidator->setLocale(QLocale::C);
@@ -44,7 +44,7 @@ CircuitOptions::CircuitOptions(std::shared_ptr<CircuitData> data, QWidget* paren
 		connect(comboBox, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(updateCircuitScale(const QString&)));
 	}
 	// Hide the fields that don't relate to the components
-	connect(circuitData.get(), SIGNAL(componentsChanged()), this, SLOT(displayComponentFields()));
+	//connect(circuitData.get(), SIGNAL(componentsChanged()), this, SLOT(displayComponentFields()));
 	// Update data configuration
 	connect(ui.circuitConfigSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(updateCircuitConfig(int)));
 	// Update which component to measure across
@@ -55,6 +55,8 @@ CircuitOptions::CircuitOptions(std::shared_ptr<CircuitData> data, QWidget* paren
 	connect(ui.simulateButton, SIGNAL(clicked()), this, SLOT(simulateCircuit()));
 	connect(ui.simulateButton, SIGNAL(clicked()), this, SLOT(startSimulationAsync()));
 	connect(watcher, SIGNAL(finished()), this, SLOT(simulationComplete()));
+	// Change the labels depending on circuit layout and response
+	connect(circuitData.get(), SIGNAL(responseChanged()), this, SLOT(updateConditionLabels()));
 }
 
 CircuitOptions::~CircuitOptions()
@@ -103,6 +105,7 @@ void CircuitOptions::updateCircuitConfig(int index)
 		circuitData->setCircuitConfig(Circuit::Configuration::PARALLEL);
 		break;
 	}
+	updateConditionLabels();
 }
 
 void CircuitOptions::buildMap()
@@ -122,6 +125,7 @@ void CircuitOptions::buildMap()
 	qobjectToDataMap.insert({ ui.phaseUnits, CircuitData::Keys::PHASE });
 	qobjectToDataMap.insert({ ui.initialConditionText, CircuitData::Keys::INITIAL_CONDITION });
 	qobjectToDataMap.insert({ ui.initialConditionPrimeText, CircuitData::Keys::INITIAL_CONDITION_PRIME });
+	qobjectToDataMap.insert({ ui.finalValueText, CircuitData::Keys::FINAL_VALUE});
 }
 
 Circuit::Units CircuitOptions::extractBaseUnit(const QString& text)
@@ -206,6 +210,7 @@ void CircuitOptions::saveAllData()
 			break;
 		case CircuitData::Keys::INITIAL_CONDITION:
 		case CircuitData::Keys::INITIAL_CONDITION_PRIME:
+		case CircuitData::Keys::FINAL_VALUE:
 			circuitData->setInitialCondition(key, val);
 			break;
 		}
@@ -249,6 +254,42 @@ void CircuitOptions::updateOutputComponent(const QString& text)
 void CircuitOptions::updateInputSignal(const QString& text)
 {
 	circuitData->setVoltageWaveform(Circuit::inputSignalMap[text]);
+}
+
+void CircuitOptions::updateConditionLabels()
+{
+	QString v0("V(0)"), i0("I(0)"), dv0("V'(0)"), di0("I'(0)"), vfinal("Vf"), ifinal("If");
+	switch (circuitData->response)
+	{
+	case Circuit::Response::NATURAL:
+		if (circuitData->getConfig() == Circuit::Configuration::PARALLEL)
+		{
+			ui.initialConditionLabel->setText(v0);
+			ui.initialConditionPrimeLabel->setText(dv0);
+			ui.finalValueLabel->setText(vfinal);
+		}
+		else if (circuitData->getConfig() == Circuit::Configuration::SERIES)
+		{
+			ui.initialConditionLabel->setText(i0);
+			ui.initialConditionPrimeLabel->setText(di0);
+			ui.finalValueLabel->setText(ifinal);
+		}
+		break;
+	case Circuit::Response::STEP:
+		if (circuitData->getConfig() == Circuit::Configuration::PARALLEL)
+		{
+			ui.initialConditionLabel->setText(i0);
+			ui.initialConditionPrimeLabel->setText(di0);
+			ui.finalValueLabel->setText(ifinal);
+		}
+		else if (circuitData->getConfig() == Circuit::Configuration::SERIES)
+		{
+			ui.initialConditionLabel->setText(v0);
+			ui.initialConditionPrimeLabel->setText(dv0);
+			ui.finalValueLabel->setText(vfinal);
+		}
+		break;
+	}
 }
 
 void CircuitOptions::simulateCircuit()

@@ -16,7 +16,8 @@ public:
 		OFFSET, 
 		INITIAL_CONDITION,
 		INITIAL_CONDITION_PRIME, 
-		RESPONSE
+		RESPONSE,
+		FINAL_VALUE
 	};
 	// Keep source and response public because retrieval will probably not be that common
 	Circuit::InputSignal voltageSource = Circuit::InputSignal::DC;
@@ -47,7 +48,7 @@ public:
 	// Returns values for resistor, inductor, capacitor, voltage, frequency, phase, offset in that order
 	const inline std::vector<Circuit::CircuitComponent> componentValues() { return { resistor, inductor, capacitor, voltage, frequency, phase, offset }; };
 	// Returns values for initialCondition, initialConditionPrime
-	const inline std::vector<double> initialConditions() { return { initialCondition, initialConditionPrime }; };
+	const inline std::vector<double> initialConditions() { return { initialCondition, initialConditionPrime, finalValue }; };
 	
 	// Return 1 element at a time using a map
 	const inline Circuit::Configuration getConfig() { return circuitConfig; };
@@ -75,9 +76,10 @@ private:
 	Circuit::CircuitComponent frequency{ Circuit::Components::NONE, Circuit::Units::HERTZ };
 	Circuit::CircuitComponent phase{ Circuit::Components::NONE, Circuit::Units::DEGREES };
 	Circuit::CircuitComponent offset{ Circuit::Components::NONE, Circuit::Units::VOLTS };
-	double initialCondition, initialConditionPrime;
+	double initialCondition, initialConditionPrime, finalValue;
 	// Maps for single element retrieval
-	std::map<Keys, const double*> conditionMap = { {Keys::INITIAL_CONDITION, &initialCondition}, {Keys::INITIAL_CONDITION_PRIME, &initialConditionPrime } };
+	std::map<Keys, const double*> conditionMap = { {Keys::INITIAL_CONDITION, &initialCondition}, {Keys::INITIAL_CONDITION_PRIME, &initialConditionPrime },
+		{Keys::FINAL_VALUE, &finalValue} };
 	std::map<Keys, const Circuit::Components*> componentMap = { {Keys::CIRCUIT_COMPONENTS, &circuitComponents}, {Keys::MEASURE_ACROSS, &measureAcross} };
 	std::map<Keys, const Circuit::CircuitComponent*> componentValueMap = { {Keys::RESISTOR, &resistor}, {Keys::INDUCTOR, &inductor}, {Keys::CAPACITOR, &capacitor},
 		{Keys::VOLTAGE, &voltage}, {Keys::FREQUENCY, &frequency}, {Keys::PHASE, &phase}, {Keys::OFFSET, &offset} };
@@ -103,7 +105,7 @@ signals:
 	// Initial Conditions
 	void initialConditionChanged();
 	void initialConditionPrimeChanged();
-
+	void finalValueChanged();
 	// Response
 	void responseChanged();
 };

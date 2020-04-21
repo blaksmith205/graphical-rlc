@@ -50,6 +50,7 @@ private slots:
 	void updateCircuitScale(const QString& text);
 	void updateOutputComponent(const QString& text);
 	void updateInputSignal(const QString& text);
+	void updateConditionLabels();
 	void simulateCircuit();
 	void simulationComplete();
 	void startSimulationAsync();
