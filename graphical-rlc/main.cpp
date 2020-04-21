@@ -13,7 +13,9 @@ int main(int argc, char* argv[])
 	}
 	else 
 	{
-		// TODO: Prompt the user for the matlab installation
+		QApplication a(argc, argv);
+		ResourceManager::askForMatlabRoot();
+		return 0;
 	}
 	ResourceManager::createOutputDir();
 	std::shared_ptr<CircuitData> data = std::make_shared<CircuitData>();
