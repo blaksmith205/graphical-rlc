@@ -12,6 +12,7 @@ public:
 	static const QString getMatlabFullDLLPath();
 	static void createOutputDir();
 	static void askForMatlabRoot();
+	static QString validTransientOutputName(bool isSeries, bool isStep);
 private:
 	static const QDir* defaultMatlabRoot;
 	static QSettings* config;

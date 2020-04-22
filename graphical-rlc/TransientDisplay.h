@@ -33,7 +33,7 @@ private slots:
 	void updateComponents(const QString& text);
 	void updateResponse(const QString& text);
 	void updateCircuitPreview();
-	void showOutput(const QString& simulationOutput);
+	void showOutput(const QString& fullRelativeName);
 signals:
 	void loadingChanged(int visible);
 };

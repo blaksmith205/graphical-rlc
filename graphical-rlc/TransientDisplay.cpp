@@ -62,12 +62,14 @@ void TransientDisplay::calcTransientAsync()
 
 void TransientDisplay::calcTransient()
 {
+	bool isSeries = circuitData->getConfig() == Circuit::Configuration::SERIES;
+	bool isStep = circuitData->response == Circuit::Response::STEP;
+
 	// Create a matlab manager
 	MatlabManager manager;
-	// TODO: obtain a valid name for the output response
-	outputName = "test";
+	outputName = ResourceManager::validTransientOutputName(isSeries, isStep);
 	// TODO: make sure the data is not empty
-	std::vector<matlab::data::Array> results = manager.calcTransient(circuitData.get(), u"generated/test");
+	std::vector<matlab::data::Array> results = manager.calcTransient(circuitData.get(), outputName.toStdU16String());
 	
 	// Obtain the data
 	matlab::data::CharArray _response = results[3];
@@ -155,9 +157,9 @@ void TransientDisplay::updateCircuitPreview()
 	updateResponse(ui.responseSelection->currentText());
 }
 
-void TransientDisplay::showOutput(const QString& simulationOutput)
+void TransientDisplay::showOutput(const QString& fullRelativeName)
 {
-	simulationImage = ResourceManager::loadImage(this, "generated/" + simulationOutput + ".png");
+	simulationImage = ResourceManager::loadImage(this, fullRelativeName);
 	simulationImage = simulationImage.scaled(ui.simulationOutput->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 	ui.simulationOutput->setPixmap(QPixmap::fromImage(simulationImage));
 	emit loadingChanged(0);

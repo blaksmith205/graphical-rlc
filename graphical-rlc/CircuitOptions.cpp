@@ -235,7 +235,7 @@ void CircuitOptions::startSimulation()
 	// Simulate the model
 	manager.loadModelAndSimulate(bestModel);
 
-	outputName = bestModel + u"SimulationOutput";
+	outputName = u"/generated/Simulation_" + bestModel + u".png";
 	// Get the results
 	manager.saveResults(outputName);
 }

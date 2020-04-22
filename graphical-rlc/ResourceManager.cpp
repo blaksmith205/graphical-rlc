@@ -111,3 +111,23 @@ void ResourceManager::askForMatlabRoot()
 		updateConfig(ini_MatlabRootKey, selectedRoot.absolutePath());
 	}
 }
+
+QString ResourceManager::validTransientOutputName(bool isSeries, bool isStep)
+{
+	QString baseOutputName("generated/Transient_RLC_");
+	if (isSeries) baseOutputName.append("series_");
+	else baseOutputName.append("parallel_");
+	if (isStep) baseOutputName.append("step_response_");
+	else baseOutputName.append("natural_response_");
+
+	int version = 1;
+	QString outputFormat = "%1%2.png";
+	QString validName = outputFormat.arg(baseOutputName, QString::number(version));
+	QDir generated(QDir::currentPath());
+	while (generated.exists(generated.absolutePath() + "/" + validName))
+	{
+		version++;
+		validName = outputFormat.arg(baseOutputName, QString::number(version));
+	}
+	return validName;
+}

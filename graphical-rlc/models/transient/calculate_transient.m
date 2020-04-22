@@ -43,10 +43,10 @@ yVals = arrayfun(real_eq, timeVals);
 figure('visible', 'off');
 plot(timeVals, yVals);
 xlabel('Time (secs)');
-if (isStep == true && finalVal ~= 0) || (isStep == false && finalVal == 0)
-    ylabel('Volts');
-elseif (isStep == true && finalVal == 0) || (isStep == false && finalVal ~= 0)
+if (isStep == true && isSeries == false) || (isStep == false && isSeries == true)
     ylabel('Amps');
+elseif (isStep == true && isSeries == true) || (isStep == false && isSeries == false)
+    ylabel('Volts');
 end
 print(outputName, '-dpng');
 
