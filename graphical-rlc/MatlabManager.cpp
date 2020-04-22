@@ -6,12 +6,16 @@
 
 using namespace matlab::engine;
 
+typedef std::basic_stringbuf<char16_t> StringBuf;
+
 void MatlabManager::call(const std::u16string& func, const std::vector<matlab::data::Array>& args)
 {
 }
 
-matlab::data::StructArray MatlabManager::calcTransient(CircuitData* data, const std::u16string& outputName)
+std::vector<matlab::data::Array> MatlabManager::calcTransient(CircuitData* data, const std::u16string& outputName)
 {
+	auto output = std::make_shared<StringBuf>();
+	auto error = std::make_shared<StringBuf>();
 	// Add the models to the path
 	matlab::data::ArrayFactory factory;
 	auto path = factory.createCharArray("models/transient");
@@ -33,7 +37,19 @@ matlab::data::StructArray MatlabManager::calcTransient(CircuitData* data, const 
 		factory.createCharArray(outputName)
 	};
 	
+	std::vector<matlab::data::Array> result;
 	// call the function
-	matlab::data::StructArray results = engine->feval(u"calculate_transient", args);
-	return results;
+	try
+	{
+		result = engine->feval(u"calculate_transient", 5, args, output, error);
+	}
+	catch (matlab::engine::EngineException e)
+	{
+		qDebug() << e.what() << "\n";
+	}
+	//String output_ = output.get()->str();
+	//String error_ = error.get()->str();
+	//qDebug() << convertUTF16StringToUTF8String(output_).c_str() << "\n";
+	//qWarning() << convertUTF16StringToUTF8String(error_).c_str() << "\n";
+	return result;
 }

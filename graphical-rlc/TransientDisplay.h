@@ -13,10 +13,14 @@ public:
 private:
 	void showPreview(const QString& resource);
 
-	// Simulation related
+	// Transient Calculation related
 	QFuture<void>* future;
 	QFutureWatcher<void>* watcher;
 	QString outputName;
+	QString response, equation;
+	double wd;
+	std::complex<double> s1, s2;
+	QString complexFormat = QString("%1 %2 j%3");
 
 	QImage circuitImage;
 	QImage simulationImage;

@@ -210,8 +210,11 @@ void CircuitOptions::saveAllData()
 			break;
 		case CircuitData::Keys::INITIAL_CONDITION:
 		case CircuitData::Keys::INITIAL_CONDITION_PRIME:
-		case CircuitData::Keys::FINAL_VALUE:
 			circuitData->setInitialCondition(key, val);
+			break;
+		case CircuitData::Keys::FINAL_VALUE:
+			if (circuitData->response == Circuit::Response::NATURAL) circuitData->setInitialCondition(key, 0);
+			else circuitData->setInitialCondition(key, val);
 			break;
 		}
 	}

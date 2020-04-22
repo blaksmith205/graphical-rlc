@@ -171,7 +171,10 @@
         <string notr="true"/>
        </property>
        <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+       <property name="dragEnabled">
+        <bool>true</bool>
        </property>
        <property name="readOnly">
         <bool>true</bool>
@@ -194,7 +197,10 @@
         <string notr="true"/>
        </property>
        <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+       <property name="dragEnabled">
+        <bool>true</bool>
        </property>
        <property name="readOnly">
         <bool>true</bool>
@@ -217,7 +223,10 @@
         <string notr="true"/>
        </property>
        <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+       <property name="dragEnabled">
+        <bool>true</bool>
        </property>
        <property name="readOnly">
         <bool>true</bool>
@@ -240,7 +249,10 @@
         <string notr="true"/>
        </property>
        <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+       <property name="dragEnabled">
+        <bool>true</bool>
        </property>
        <property name="readOnly">
         <bool>true</bool>
@@ -263,7 +275,10 @@
         <string notr="true"/>
        </property>
        <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+       <property name="dragEnabled">
+        <bool>true</bool>
        </property>
        <property name="readOnly">
         <bool>true</bool>

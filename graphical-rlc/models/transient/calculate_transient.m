@@ -1,4 +1,4 @@
-function returnVals = calculate_transient(R, L, C, y_init, dy_init, finalVal, isSeries, isStep, outputName)
+function [root1, root2, damped_freq, response, rhs] = calculate_transient(R, L, C, y_init, dy_init, finalVal, isSeries, isStep, outputName)
 syms C1 C2 sourceVal t s1 s2 a wd;
 %CALCULATE_TRANSIENT Calculates and displays the transient response
 
@@ -50,8 +50,10 @@ elseif (isStep == true && finalVal == 0) || (isStep == false && finalVal ~= 0)
 end
 print(outputName, '-dpng');
 
-% Setup the return values
-fields = ["s1" "s2" "wd" "response" "rhs"];
-returnVals = struct(fields(1), roots(1), fields(2), roots(2), fields(3), roots(3), fields(4), response, fields(5), rhs);
+% Setup the output
+root1 = roots(1);
+root2 = roots(2);
+damped_freq = roots(3);
+rhs = char(rhs);
 end
 

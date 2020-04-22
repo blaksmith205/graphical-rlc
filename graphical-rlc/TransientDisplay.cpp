@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <iostream>
 #include <complex>
 #include <QtConcurrent>
 #include "TransientDisplay.h"
@@ -25,6 +26,30 @@ void TransientDisplay::showPreview(const QString& resource)
 
 void TransientDisplay::calcComplete()
 {
+	// Display the results
+	QString s1Str, s2Str;
+	// Format S1
+	if (s1.imag() == 0)
+	{
+		s1Str = QString::number(s1.real());
+	}
+	else
+	{
+		s1Str = complexFormat.arg(QString::number(s1.real()), s1.imag() < 0 ? QString("-") : QString("+"), QString::number(abs(s1.imag())));
+	}
+	if (s2.imag() == 0)
+	{
+		s2Str = QString::number(s2.real());
+	}
+	else
+	{
+		s2Str = complexFormat.arg(QString::number(s2.real()), s2.imag() < 0 ? QString("-") : QString("+"), QString::number(abs(s2.imag())));
+	}
+	ui.s1Output->setText(s1Str);
+	ui.s2Output->setText(s2Str);
+	ui.wdOutput->setText(QString::number(wd));
+	ui.responseType->setText(response);
+	ui.equationRHS->setText(equation);
 	showOutput(outputName);
 }
 
@@ -42,11 +67,33 @@ void TransientDisplay::calcTransient()
 	// TODO: obtain a valid name for the output response
 	outputName = "test";
 	// TODO: make sure the data is not empty
-	matlab::data::StructArray results = manager.calcTransient(circuitData.get(), u"generated/test");
+	std::vector<matlab::data::Array> results = manager.calcTransient(circuitData.get(), u"generated/test");
+	
+	// Obtain the data
+	matlab::data::CharArray _response = results[3];
+	response = QString::fromStdString(_response.toAscii());
+	if (response == QString("Under"))
+	{
+		matlab::data::TypedArray<std::complex<double>> _s1 = results[0];
+		matlab::data::TypedArray<std::complex<double>> _s2 = results[1];
+		s1 = _s1[0];
+		s2 = _s2[0];
+	}
+	else
+	{
+		matlab::data::TypedArray<double> _s1 = results[0];
+		matlab::data::TypedArray<double> _s2 = results[1];
+		s1 = std::complex<double>(_s1[0], 0);
+		s2 = std::complex<double>(_s2[0], 0);
+	}
 
-	//std::complex<double> s1 = results[matlab::data::MATLABFieldIdentifier("s1")]
-	//std::string complexStr = s1.real << " " << s1.imag;
-	//ui.s1Output->setText(QString::fromStdString(complexStr));
+	matlab::data::TypedArray<double> _wd = results[2];
+	matlab::data::CharArray _equation = results[4];
+
+	// save the common data
+	wd = _wd[0];
+	equation = QString::fromStdString(_equation.toAscii());
+	equation = equation.replace("exp", "e^");
 }
 
 void TransientDisplay::updateComponents(const QString& text)
