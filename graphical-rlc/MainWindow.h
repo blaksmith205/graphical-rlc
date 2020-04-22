@@ -24,8 +24,6 @@ private:
 	// Menu related
 	QAction* aboutAct;
 	QAction* aboutQtAct;
-	// Can't remove this because app displaying breaks
-	std::map<QString, Circuit::Components> componentMap;
 private slots:
 	void help();
 	void updateProgressBar(int visible);

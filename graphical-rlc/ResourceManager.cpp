@@ -93,13 +93,13 @@ void ResourceManager::createOutputDir()
 void ResourceManager::askForMatlabRoot()
 {
 	QDir selectedRoot;
-	int ret = QMessageBox::warning(nullptr, QObject::tr("Missing Matlab"), QObject::tr("Root folder for MATLAB could not be found.\nPlease select the MATLAB version.\n\nExample: C:/Program Files/MATLAB/R2020a"), QMessageBox::Open, QMessageBox::Cancel);
+	int ret = QMessageBox::warning(Q_NULLPTR, QObject::tr("Missing Matlab"), QObject::tr("Root folder for MATLAB could not be found.\nPlease select the MATLAB version.\n\nExample: C:/Program Files/MATLAB/R2020a"), QMessageBox::Open, QMessageBox::Cancel);
 	switch (ret)
 	{
 	case QMessageBox::Cancel:
 		break;
 	case QMessageBox::Open:
-		selectedRoot = QFileDialog::getExistingDirectory(nullptr, QObject::tr("Select MATLAB Version"),
+		selectedRoot = QFileDialog::getExistingDirectory(Q_NULLPTR, QObject::tr("Select MATLAB Version"),
 			"/home",
 			QFileDialog::ShowDirsOnly
 			| QFileDialog::DontResolveSymlinks);
