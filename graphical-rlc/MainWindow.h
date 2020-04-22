@@ -12,15 +12,22 @@ class MainWindow : public QMainWindow {
 public:
 	MainWindow(std::shared_ptr<CircuitData> data, QWidget* parent = Q_NULLPTR);
 private:
+	void createActions();
+	void createMenus();
+
 	// Custom left and right widgets
 	CircuitOptions* circuitsOptions;
 	TransientDisplay* outputImages;
 
 	Ui::MainWindowClass ui;
 
+	// Menu related
+	QAction* aboutAct;
+	QAction* aboutQtAct;
 	// Can't remove this because app displaying breaks
 	std::map<QString, Circuit::Components> componentMap;
 private slots:
+	void help();
 	void updateProgressBar(int visible);
 };
 
