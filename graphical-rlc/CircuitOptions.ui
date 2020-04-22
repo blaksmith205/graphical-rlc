@@ -334,6 +334,9 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tab_2">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <attribute name="title">
        <string>Voltage Input</string>
       </attribute>
