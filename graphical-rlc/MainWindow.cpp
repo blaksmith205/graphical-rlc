@@ -41,7 +41,7 @@ void MainWindow::help()
 	QMessageBox::about(this, tr("About GraphicalRLC"),
 		tr("<p>This application provides a way to calculate and display the "
 			"transient response for RLC circuits with a DC source.</p>"
-			"<p> App version: 1.0</p>"));
+			"<p> App version: 1.1</p>"));
 }
 
 // 0 means not visible
