@@ -189,12 +189,24 @@ void CircuitOptions::saveAllData()
 			circuitData->setComponentValue(key, val, keyToScale[key]);
 			break;
 		case CircuitData::Keys::INDUCTOR:
-			if (isInductorValid) circuitData->setComponentValue(key, val, keyToScale[key]);
-			else circuitData->setComponentValue(key, 0.0, keyToScale[key]);
+			if (isInductorValid)
+			{
+				circuitData->setComponentValue(key, val, keyToScale[key]);
+			}
+			else
+			{
+				circuitData->setComponentValue(key, 0.0, keyToScale[key]);
+			}
 			break;
 		case CircuitData::Keys::CAPACITOR:
-			if (isCapacitorValid) circuitData->setComponentValue(key, val, keyToScale[key]);
-			else circuitData->setComponentValue(key, 0.0, keyToScale[key]);
+			if (isCapacitorValid)
+			{
+				circuitData->setComponentValue(key, val, keyToScale[key]);
+			}
+			else 
+			{
+				circuitData->setComponentValue(key, 0.0, keyToScale[key]);
+			}
 			break;
 		case CircuitData::Keys::VOLTAGE:
 			circuitData->setScaledVoltage(val, keyToScale[key], extractBaseUnit(ui.voltageScale->currentText()));
@@ -281,15 +293,15 @@ void CircuitOptions::updateConditionLabels()
 	case Circuit::Response::STEP:
 		if (circuitData->getConfig() == Circuit::Configuration::PARALLEL)
 		{
-			ui.initialConditionLabel->setText(i0);
-			ui.initialConditionPrimeLabel->setText(di0);
-			ui.finalValueLabel->setText(ifinal);
-		}
-		else if (circuitData->getConfig() == Circuit::Configuration::SERIES)
-		{
 			ui.initialConditionLabel->setText(v0);
 			ui.initialConditionPrimeLabel->setText(dv0);
 			ui.finalValueLabel->setText(vfinal);
+		}
+		else if (circuitData->getConfig() == Circuit::Configuration::SERIES)
+		{
+			ui.initialConditionLabel->setText(i0);
+			ui.initialConditionPrimeLabel->setText(di0);
+			ui.finalValueLabel->setText(ifinal);
 		}
 		break;
 	}

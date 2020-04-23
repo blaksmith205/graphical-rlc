@@ -23,7 +23,7 @@ private:
 
 	//Data
 private:
-	bool isInductorValid, isCapacitorValid;
+	bool isInductorValid = true, isCapacitorValid = true;
 	bool isTransient = true; // TODO: check if transient should be calculated
 	// Simulation related
 	QFuture<void>* future;
