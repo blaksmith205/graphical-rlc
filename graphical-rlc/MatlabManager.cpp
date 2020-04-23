@@ -6,16 +6,13 @@
 
 using namespace matlab::engine;
 
-typedef std::basic_stringbuf<char16_t> StringBuf;
-
 void MatlabManager::call(const std::u16string& func, const std::vector<matlab::data::Array>& args)
 {
 }
 
-std::vector<matlab::data::Array> MatlabManager::calcTransient(CircuitData* data, const std::u16string& outputName)
+std::vector<matlab::data::Array> MatlabManager::calcTransient(CircuitData* data, const std::u16string& outputName, 
+	const std::shared_ptr<std::basic_stringbuf<char16_t>>& output, const std::shared_ptr<std::basic_stringbuf<char16_t>>& error)
 {
-	auto output = std::make_shared<StringBuf>();
-	auto error = std::make_shared<StringBuf>();
 	// Add the models to the path
 	matlab::data::ArrayFactory factory;
 	auto path = factory.createCharArray("models/transient");
@@ -47,9 +44,5 @@ std::vector<matlab::data::Array> MatlabManager::calcTransient(CircuitData* data,
 	{
 		qDebug() << e.what() << "\n";
 	}
-	//String output_ = output.get()->str();
-	//String error_ = error.get()->str();
-	//qDebug() << convertUTF16StringToUTF8String(output_).c_str() << "\n";
-	//qWarning() << convertUTF16StringToUTF8String(error_).c_str() << "\n";
 	return result;
 }

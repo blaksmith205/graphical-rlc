@@ -6,8 +6,10 @@
 #include "ResourceManager.h"
 #include "MatlabManager.h"
 
+typedef std::basic_stringbuf<char16_t> StringBuf;
+
 TransientDisplay::TransientDisplay(std::shared_ptr<CircuitData> data, QWidget* parent)
-	: QWidget(parent), circuitData(data)
+	: QWidget(parent), circuitData(data), matlabOutput(std::make_shared<StringBuf>()), matlabError(std::make_shared<StringBuf>())
 {
 	ui.setupUi(this);
 	future = new QFuture<void>();
@@ -69,9 +71,19 @@ void TransientDisplay::calcTransient()
 	MatlabManager manager;
 	outputName = ResourceManager::validTransientOutputName(isSeries, isStep);
 	// TODO: make sure the data is not empty
-	std::vector<matlab::data::Array> results = manager.calcTransient(circuitData.get(), outputName.toStdU16String());
-	
+	std::vector<matlab::data::Array> results = manager.calcTransient(circuitData.get(), outputName.toStdU16String(), matlabOutput, matlabError);
+
 	// Obtain the data
+	if (results.empty())
+	{
+		response = "";
+		s1 = 0;
+		s2 = 0;
+		wd = 0;
+		equation = "";
+		return;
+	}
+
 	matlab::data::CharArray _response = results[3];
 	response = QString::fromStdString(_response.toAscii());
 	if (response == QString("Under"))

@@ -12,7 +12,8 @@ public:
 
 private:
 	void showPreview(const QString& resource);
-
+	// Debugging and output
+	std::shared_ptr<std::basic_stringbuf<char16_t>> matlabOutput, matlabError;
 	// Transient Calculation related
 	QFuture<void>* future;
 	QFutureWatcher<void>* watcher;
