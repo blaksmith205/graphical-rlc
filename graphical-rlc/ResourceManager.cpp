@@ -131,3 +131,16 @@ QString ResourceManager::validTransientOutputName(bool isSeries, bool isStep)
 	}
 	return validName;
 }
+
+void ResourceManager::outputToFile(const QString& fileName, const char* output)
+{
+	QDir outputDir = QDir::currentPath() + "/generated/output";
+	if (!outputDir.exists(outputDir.absolutePath()))
+	{
+		outputDir.mkdir(".");
+	}
+	QFile outputFile = outputDir.absolutePath() + QDir::separator() + fileName;
+	outputFile.open(QIODevice::OpenModeFlag::WriteOnly);
+	outputFile.write(output);
+	outputFile.close();
+}

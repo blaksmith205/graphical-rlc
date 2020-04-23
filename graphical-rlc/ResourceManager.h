@@ -13,6 +13,7 @@ public:
 	static void createOutputDir();
 	static void askForMatlabRoot();
 	static QString validTransientOutputName(bool isSeries, bool isStep);
+	static void outputToFile(const QString& fileName, const char* output);
 private:
 	static const QDir* defaultMatlabRoot;
 	static QSettings* config;
