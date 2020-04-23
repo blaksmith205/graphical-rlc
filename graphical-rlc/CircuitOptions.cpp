@@ -2,20 +2,24 @@
 #include <QtConcurrent>
 #include "CircuitOptions.h"
 #include "UnitConverter.h"
-#include "MatlabManager.h"
+#include "SimulinkManager.h"
 
 CircuitOptions::CircuitOptions(std::shared_ptr<CircuitData> data, QWidget* parent)
 	: QWidget(parent), circuitData(data)
 {
 	ui.setupUi(this);
+	// TODO: figure out how to use measure across for transient/stable
+	// Temporarily disable measureAcross
+	ui.measureAcrossLabel->setVisible(false);
+	ui.measureAcrossSelection->setVisible(false);
 	future = new QFuture<void>();
 	watcher = new QFutureWatcher<void>();
 	buildMap();
 	// Limit TextFields to only accept numbers
 	lineEdits = this->findChildren<QLineEdit*>();
-	double top = 10000; // Top - 1 is the number of characters limit
 	for (auto lineEdit : lineEdits)
 	{
+		double top = 10000; // Top - 1 is the number of characters limit
 		QDoubleValidator* dblValidator = new QDoubleValidator(0, top - 1, 8, lineEdit);
 		dblValidator->setNotation(QDoubleValidator::StandardNotation);
 		dblValidator->setLocale(QLocale::C);
@@ -27,6 +31,8 @@ CircuitOptions::CircuitOptions(std::shared_ptr<CircuitData> data, QWidget* paren
 		}
 		else
 		{
+			if (lineEdit == ui.initialConditionText || lineEdit == ui.initialConditionPrimeText)
+				top = 100e+7;
 			dblValidator->setBottom(-(top - 1));
 			lineEdit->setValidator(dblValidator);
 			connect(lineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(validateTextValue(const QString&)));
@@ -38,7 +44,7 @@ CircuitOptions::CircuitOptions(std::shared_ptr<CircuitData> data, QWidget* paren
 		connect(comboBox, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(updateCircuitScale(const QString&)));
 	}
 	// Hide the fields that don't relate to the components
-	connect(circuitData.get(), SIGNAL(componentsChanged()), this, SLOT(displayComponentFields()));
+	//connect(circuitData.get(), SIGNAL(componentsChanged()), this, SLOT(displayComponentFields()));
 	// Update data configuration
 	connect(ui.circuitConfigSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(updateCircuitConfig(int)));
 	// Update which component to measure across
@@ -49,6 +55,8 @@ CircuitOptions::CircuitOptions(std::shared_ptr<CircuitData> data, QWidget* paren
 	connect(ui.simulateButton, SIGNAL(clicked()), this, SLOT(simulateCircuit()));
 	connect(ui.simulateButton, SIGNAL(clicked()), this, SLOT(startSimulationAsync()));
 	connect(watcher, SIGNAL(finished()), this, SLOT(simulationComplete()));
+	// Change the labels depending on circuit layout and response
+	connect(circuitData.get(), SIGNAL(responseChanged()), this, SLOT(updateConditionLabels()));
 }
 
 CircuitOptions::~CircuitOptions()
@@ -97,6 +105,7 @@ void CircuitOptions::updateCircuitConfig(int index)
 		circuitData->setCircuitConfig(Circuit::Configuration::PARALLEL);
 		break;
 	}
+	updateConditionLabels();
 }
 
 void CircuitOptions::buildMap()
@@ -114,6 +123,9 @@ void CircuitOptions::buildMap()
 	qobjectToDataMap.insert({ ui.voltageScale, CircuitData::Keys::VOLTAGE });
 	qobjectToDataMap.insert({ ui.frequencyScale, CircuitData::Keys::FREQUENCY });
 	qobjectToDataMap.insert({ ui.phaseUnits, CircuitData::Keys::PHASE });
+	qobjectToDataMap.insert({ ui.initialConditionText, CircuitData::Keys::INITIAL_CONDITION });
+	qobjectToDataMap.insert({ ui.initialConditionPrimeText, CircuitData::Keys::INITIAL_CONDITION_PRIME });
+	qobjectToDataMap.insert({ ui.finalValueText, CircuitData::Keys::FINAL_VALUE});
 }
 
 Circuit::Units CircuitOptions::extractBaseUnit(const QString& text)
@@ -177,12 +189,24 @@ void CircuitOptions::saveAllData()
 			circuitData->setComponentValue(key, val, keyToScale[key]);
 			break;
 		case CircuitData::Keys::INDUCTOR:
-			if (isInductorValid) circuitData->setComponentValue(key, val, keyToScale[key]);
-			else circuitData->setComponentValue(key, 0.0, keyToScale[key]);
+			if (isInductorValid)
+			{
+				circuitData->setComponentValue(key, val, keyToScale[key]);
+			}
+			else
+			{
+				circuitData->setComponentValue(key, 0.0, keyToScale[key]);
+			}
 			break;
 		case CircuitData::Keys::CAPACITOR:
-			if (isCapacitorValid) circuitData->setComponentValue(key, val, keyToScale[key]);
-			else circuitData->setComponentValue(key, 0.0, keyToScale[key]);
+			if (isCapacitorValid)
+			{
+				circuitData->setComponentValue(key, val, keyToScale[key]);
+			}
+			else 
+			{
+				circuitData->setComponentValue(key, 0.0, keyToScale[key]);
+			}
 			break;
 		case CircuitData::Keys::VOLTAGE:
 			circuitData->setScaledVoltage(val, keyToScale[key], extractBaseUnit(ui.voltageScale->currentText()));
@@ -196,6 +220,14 @@ void CircuitOptions::saveAllData()
 		case CircuitData::Keys::OFFSET:
 			circuitData->setScaledOffset(val, keyToScale[key]);
 			break;
+		case CircuitData::Keys::INITIAL_CONDITION:
+		case CircuitData::Keys::INITIAL_CONDITION_PRIME:
+			circuitData->setInitialCondition(key, val);
+			break;
+		case CircuitData::Keys::FINAL_VALUE:
+			if (circuitData->response == Circuit::Response::NATURAL) circuitData->setInitialCondition(key, 0);
+			else circuitData->setInitialCondition(key, val);
+			break;
 		}
 	}
 }
@@ -203,8 +235,8 @@ void CircuitOptions::saveAllData()
 void CircuitOptions::startSimulation()
 {
 	using namespace matlab::engine;
-	// Create a matlab manager
-	MatlabManager manager;
+	// Create a simulink manager
+	SimulinkManager manager;
 	manager.setVariables(circuitData);
 
 	// Setup default simulation parameters
@@ -215,7 +247,7 @@ void CircuitOptions::startSimulation()
 	// Simulate the model
 	manager.loadModelAndSimulate(bestModel);
 
-	outputName = bestModel + u"SimulationOutput";
+	outputName = u"/generated/Simulation_" + bestModel + u".png";
 	// Get the results
 	manager.saveResults(outputName);
 }
@@ -239,6 +271,42 @@ void CircuitOptions::updateInputSignal(const QString& text)
 	circuitData->setVoltageWaveform(Circuit::inputSignalMap[text]);
 }
 
+void CircuitOptions::updateConditionLabels()
+{
+	QString v0("V(0)"), i0("I(0)"), dv0("V'(0)"), di0("I'(0)"), vfinal("Vf"), ifinal("If");
+	switch (circuitData->response)
+	{
+	case Circuit::Response::NATURAL:
+		if (circuitData->getConfig() == Circuit::Configuration::PARALLEL)
+		{
+			ui.initialConditionLabel->setText(v0);
+			ui.initialConditionPrimeLabel->setText(dv0);
+			ui.finalValueLabel->setText(vfinal);
+		}
+		else if (circuitData->getConfig() == Circuit::Configuration::SERIES)
+		{
+			ui.initialConditionLabel->setText(i0);
+			ui.initialConditionPrimeLabel->setText(di0);
+			ui.finalValueLabel->setText(ifinal);
+		}
+		break;
+	case Circuit::Response::STEP:
+		if (circuitData->getConfig() == Circuit::Configuration::PARALLEL)
+		{
+			ui.initialConditionLabel->setText(v0);
+			ui.initialConditionPrimeLabel->setText(dv0);
+			ui.finalValueLabel->setText(vfinal);
+		}
+		else if (circuitData->getConfig() == Circuit::Configuration::SERIES)
+		{
+			ui.initialConditionLabel->setText(i0);
+			ui.initialConditionPrimeLabel->setText(di0);
+			ui.finalValueLabel->setText(ifinal);
+		}
+		break;
+	}
+}
+
 void CircuitOptions::simulateCircuit()
 {
 	emit loadingChanged(1);
@@ -252,9 +320,16 @@ void CircuitOptions::simulationComplete()
 
 void CircuitOptions::startSimulationAsync()
 {
-	emit loadingChanged(1);
-	*future = QtConcurrent::run(this, &CircuitOptions::startSimulation);
-	watcher->setFuture(*future);
+	if (isTransient)
+	{
+		emit transientClicked();
+	}
+	else
+	{
+		emit loadingChanged(1);
+		*future = QtConcurrent::run(this, &CircuitOptions::startSimulation);
+		watcher->setFuture(*future);
+	}
 }
 
 void CircuitOptions::validateTextValue(const QString& text)

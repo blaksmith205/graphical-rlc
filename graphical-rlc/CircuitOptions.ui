@@ -34,6 +34,9 @@
    </property>
    <item>
     <widget class="QTabWidget" name="tabWidget">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -42,6 +45,9 @@
      </property>
      <property name="currentIndex">
       <number>0</number>
+     </property>
+     <property name="tabsClosable">
+      <bool>false</bool>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -209,6 +215,9 @@
        </item>
        <item>
         <layout class="QFormLayout" name="formLayout">
+         <property name="labelAlignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
          <item row="0" column="0">
           <widget class="QLabel" name="circuitConfigLabel">
            <property name="minimumSize">
@@ -229,6 +238,9 @@
              <width>100</width>
              <height>0</height>
             </size>
+           </property>
+           <property name="currentIndex">
+            <number>1</number>
            </property>
            <item>
             <property name="text">
@@ -280,18 +292,51 @@
            </item>
           </widget>
          </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="initialConditionLabel">
+           <property name="text">
+            <string>V(0)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="initialConditionText"/>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="initialConditionPrimeLabel">
+           <property name="text">
+            <string>V'(0)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLineEdit" name="initialConditionPrimeText"/>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="finalValueLabel">
+           <property name="text">
+            <string>Vf</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QLineEdit" name="finalValueText"/>
+         </item>
         </layout>
        </item>
        <item alignment="Qt::AlignHCenter">
         <widget class="QPushButton" name="simulateButton">
          <property name="text">
-          <string>Simulate</string>
+          <string>Calculate Transient Response</string>
          </property>
         </widget>
        </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tab_2">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <attribute name="title">
        <string>Voltage Input</string>
       </attribute>
@@ -456,6 +501,9 @@
              <width>100</width>
              <height>0</height>
             </size>
+           </property>
+           <property name="currentIndex">
+            <number>2</number>
            </property>
            <item>
             <property name="text">

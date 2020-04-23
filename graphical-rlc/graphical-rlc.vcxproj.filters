@@ -7,16 +7,10 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MatlabManager.cpp">
-      <Filter>Source Files\matlab</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
     <ClCompile Include="CircuitOptions.cpp">
-      <Filter>Source Files\ui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImageDisplay.cpp">
       <Filter>Source Files\ui</Filter>
     </ClCompile>
     <ClCompile Include="CircuitData.cpp">
@@ -27,6 +21,15 @@
     </ClCompile>
     <ClCompile Include="MainWindow.cpp">
       <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="TransientDisplay.cpp">
+      <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="SimulinkManager.cpp">
+      <Filter>Source Files\matlab</Filter>
+    </ClCompile>
+    <ClCompile Include="MatlabManager.cpp">
+      <Filter>Source Files\matlab</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -64,9 +67,6 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MatlabManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ResourceManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -74,6 +74,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UnitConverter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SimulinkManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MatlabManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -87,7 +93,7 @@
     <QtUic Include="CircuitOptions.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="ImageDisplay.ui">
+    <QtUic Include="TransientDisplay.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
@@ -95,13 +101,13 @@
     <QtMoc Include="CircuitOptions.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="ImageDisplay.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="CircuitData.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="MainWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="TransientDisplay.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

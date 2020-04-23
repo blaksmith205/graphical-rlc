@@ -4,7 +4,7 @@
 #include "ui_MainWindow.h"
 #include "CircuitData.h"
 #include "CircuitOptions.h"
-#include "ImageDisplay.h"
+#include "TransientDisplay.h"
 
 class MainWindow : public QMainWindow {
 	Q_OBJECT
@@ -12,15 +12,20 @@ class MainWindow : public QMainWindow {
 public:
 	MainWindow(std::shared_ptr<CircuitData> data, QWidget* parent = Q_NULLPTR);
 private:
+	void createActions();
+	void createMenus();
+
 	// Custom left and right widgets
 	CircuitOptions* circuitsOptions;
-	ImageDisplay* outputImages;
+	TransientDisplay* outputImages;
 
 	Ui::MainWindowClass ui;
 
-	// Can't remove this because app displaying breaks
-	std::map<QString, Circuit::Components> componentMap;
+	// Menu related
+	QAction* aboutAct;
+	QAction* aboutQtAct;
 private slots:
+	void help();
 	void updateProgressBar(int visible);
 };
 

@@ -3,75 +3,43 @@
 #include "MatlabEngine.hpp"
 #include "MatlabDataArray.hpp"
 #include <Windows.h>
+
 using namespace matlab::engine;
 
-static std::map<int, std::string> variableNames = { {0, "R"}, {1, "L"}, {2, "C"}, {3, "A"}, {4, "F"}, {5, "phase"}, {6, "offset"} };
-
-void MatlabManager::loadModel(const std::u16string& modelName)
+void MatlabManager::call(const std::u16string& func, const std::vector<matlab::data::Array>& args)
 {
-	// Set the model name in matlab's workspace
+}
+
+std::vector<matlab::data::Array> MatlabManager::calcTransient(CircuitData* data, const std::u16string& outputName, 
+	const std::shared_ptr<std::basic_stringbuf<char16_t>>& output, const std::shared_ptr<std::basic_stringbuf<char16_t>>& error)
+{
+	// Add the models to the path
 	matlab::data::ArrayFactory factory;
-	auto name = factory.createCharArray(modelName);
-	engine->setVariable("modelName", name);
-	auto loadArgs = factory.createCharArray(modelName);
-	// Load the model and wait for simulation
-	engine->feval("load_system", loadArgs);
-}
-
-void MatlabManager::loadModelAndSimulate(const std::u16string& modelName)
-{
-	loadModel(modelName);
-	startSimulation();
-}
-
-void MatlabManager::saveResults(const std::u16string& outputName)
-{
-	// Get simulation data and create a graph
-	engine->eval(u"y = simOut.get('yOut');");
-	engine->eval(u"t = simOut.get('tOut');");
-	engine->eval(u"f = figure('visible','off'); plot(t,y);"); // Plot without showing the image
-	std::u16string printCall = u"print('generated/" + outputName + u"','-dpng')";
-	engine->eval(printCall);
-}
-
-void MatlabManager::setVariables(const std::shared_ptr<CircuitData>& data)
-{
-	auto componentValues = data->componentValues();
-	matlab::data::ArrayFactory factory;
-	for (int i = 0; i < componentValues.size(); i++)
+	auto path = factory.createCharArray("models/transient");
+	engine->feval(u"addpath", path);
+	try
 	{
-		auto scalar = factory.createScalar<double>(componentValues[i].value);
-		engine->setVariable(variableNames[i], scalar);
+		auto dataVals = data->componentValues();
+		auto config = data->getConfig();
+		auto conditions = data->initialConditions();
+		// Setup the args
+		std::vector<matlab::data::Array> args = {
+			factory.createScalar<double>(dataVals[0].value), // R
+			factory.createScalar<double>(dataVals[1].value), // L
+			factory.createScalar<double>(dataVals[2].value), // C
+			factory.createScalar<double>(conditions[0]), // y_init
+			factory.createScalar<double>(conditions[1]), // dy_init
+			factory.createScalar<double>(conditions[2]), // finalVal
+			factory.createScalar<bool>(config == Circuit::Configuration::SERIES), // isSeries = false if config is parallel
+			factory.createScalar<bool>(data->response == Circuit::Response::STEP), // isStep is false when response is natural
+			factory.createCharArray(outputName)
+		};
+		// call the function
+		return engine->feval(u"calculate_transient", 5, args, output, error);
 	}
-}
-
-void MatlabManager::setSimulationParameters()
-{
-	// Create MATLAB data array factory
-	matlab::data::ArrayFactory factory;
-
-	// Create struct for simulation parameters
-	auto parameterStruct = factory.createStructArray({ 1,4 }, {
-		"SaveOutput",
-		"OutputSaveName",
-		"SaveTime",
-		"TimeSaveName" });
-	parameterStruct[0]["SaveOutput"] = factory.createCharArray("on");
-	parameterStruct[0]["OutputSaveName"] = factory.createCharArray("yOut");
-	parameterStruct[0]["SaveTime"] = factory.createCharArray("on");
-	parameterStruct[0]["TimeSaveName"] = factory.createCharArray("tOut");
-
-	// Put simulation parameter struct in MATLAB
-	engine->setVariable(u"parameterStruct", parameterStruct);
-}
-
-void MatlabManager::setSimulationParameters(const matlab::data::StructArray& parameterStruct)
-{
-	// Put simulation parameter struct in MATLAB
-	engine->setVariable(u"parameterStruct", parameterStruct);
-}
-
-void MatlabManager::startSimulation()
-{
-	engine->eval(u"simOut = sim(modelName, parameterStruct);");
+	catch (matlab::engine::EngineException e)
+	{
+		qDebug() << e.what() << "\n";
+	}
+	return {factory.createScalar<double>(0)};
 }

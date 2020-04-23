@@ -35,7 +35,7 @@ bool ResourceManager::isMatlabInstalled()
 {
 	QRegularExpression matlabRe("/(R{1}20)\\w+/i");
 	// First check if the location was setbefore:
-	if (config->contains(ini_MatlabRootKey)) return true;
+	if (config->contains(ini_MatlabRootKey) && isMatlabPathValid(config->value(ini_MatlabRootKey).toString())) return true;
 
 	// First check if installed in default location and the extern directory is available
 	if (defaultMatlabRoot->exists())
@@ -48,7 +48,7 @@ bool ResourceManager::isMatlabInstalled()
 			if (exp.isValid())
 			{
 				QDir latestVersion = QDir(defaultMatlabRoot->absolutePath() + QDir::separator() + subFile);
-				if (latestVersion.exists(latestVersion.absolutePath() + matlabWindowsDLLSubDir))
+				if (isMatlabPathValid(latestVersion.absolutePath()))
 				{
 					// Update config to have the latest root dir
 					updateConfig(ini_MatlabRootKey, latestVersion.absolutePath());
@@ -60,6 +60,12 @@ bool ResourceManager::isMatlabInstalled()
 
 	// Can't find Matlab in default location
 	return false;
+}
+
+bool ResourceManager::isMatlabPathValid(const QString& path)
+{
+	QDir dir(path);
+	return dir.exists(dir.absolutePath() + QDir::separator() + matlabWindowsDLLSubDir);
 }
 
 const QByteArray ResourceManager::getEnvPath()
@@ -82,4 +88,59 @@ void ResourceManager::createOutputDir()
 	{
 		outputDir.mkpath(".");
 	}
+}
+
+void ResourceManager::askForMatlabRoot()
+{
+	QDir selectedRoot;
+	int ret = QMessageBox::warning(Q_NULLPTR, QObject::tr("Missing Matlab"), QObject::tr("Root folder for MATLAB could not be found.\nPlease select the MATLAB version.\n\nExample: C:/Program Files/MATLAB/R2020a"), QMessageBox::Open, QMessageBox::Cancel);
+	switch (ret)
+	{
+	case QMessageBox::Cancel:
+		break;
+	case QMessageBox::Open:
+		selectedRoot = QFileDialog::getExistingDirectory(Q_NULLPTR, QObject::tr("Select MATLAB Version"),
+			"/home",
+			QFileDialog::ShowDirsOnly
+			| QFileDialog::DontResolveSymlinks);
+	}
+
+	// Make sure the selected path is valid
+	if (isMatlabPathValid(selectedRoot.absolutePath()))
+	{
+		updateConfig(ini_MatlabRootKey, selectedRoot.absolutePath());
+	}
+}
+
+QString ResourceManager::validTransientOutputName(bool isSeries, bool isStep)
+{
+	QString baseOutputName("generated/Transient_RLC_");
+	if (isSeries) baseOutputName.append("series_");
+	else baseOutputName.append("parallel_");
+	if (isStep) baseOutputName.append("step_response_");
+	else baseOutputName.append("natural_response_");
+
+	int version = 1;
+	QString outputFormat = "%1%2.png";
+	QString validName = outputFormat.arg(baseOutputName, QString::number(version));
+	QDir generated(QDir::currentPath());
+	while (generated.exists(generated.absolutePath() + "/" + validName))
+	{
+		version++;
+		validName = outputFormat.arg(baseOutputName, QString::number(version));
+	}
+	return validName;
+}
+
+void ResourceManager::outputToFile(const QString& fileName, const char* output)
+{
+	QDir outputDir = QDir::currentPath() + "/generated/output";
+	if (!outputDir.exists(outputDir.absolutePath()))
+	{
+		outputDir.mkdir(".");
+	}
+	QFile outputFile = outputDir.absolutePath() + QDir::separator() + fileName;
+	outputFile.open(QIODevice::OpenModeFlag::WriteOnly);
+	outputFile.write(output);
+	outputFile.close();
 }

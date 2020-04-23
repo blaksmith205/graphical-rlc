@@ -8,6 +8,12 @@ namespace Circuit
 		PARALLEL
 	};
 
+	// The user selected response type
+	enum class Response {
+		NATURAL,
+		STEP
+	};
+
 	// Components insde of an RLC circuit
 	enum class Components {
 		NONE,
