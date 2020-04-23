@@ -74,7 +74,7 @@ void TransientDisplay::calcTransient()
 	std::vector<matlab::data::Array> results = manager.calcTransient(circuitData.get(), outputName.toStdU16String(), matlabOutput, matlabError);
 
 	// Obtain the data
-	if (results.empty())
+	if (results.size() < 5)
 	{
 		response = "";
 		s1 = 0;

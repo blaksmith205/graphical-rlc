@@ -41,5 +41,5 @@ std::vector<matlab::data::Array> MatlabManager::calcTransient(CircuitData* data,
 	{
 		qDebug() << e.what() << "\n";
 	}
-	return {};
+	return {factory.createScalar<double>(0)};
 }
